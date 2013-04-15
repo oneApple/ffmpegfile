@@ -1,0 +1,306 @@
+body {
+	padding-top: 10px; padding-right: 20px; padding-left: 20px; font-family: Verdana, "Lucida Grande", Arial, Helvetica, sans-serif; font-size: 12px; background-color: rgb(217, 214, 203);
+}
+img {
+	border: 0px currentColor;
+}
+td {
+	font-size: 12px;
+}
+a {
+	color: rgb(34, 51, 85); text-decoration: none;
+}
+.postbody a {
+	color: rgb(29, 88, 209);
+}
+a:hover {
+	text-decoration: underline;
+}
+h1 {
+	margin: 0px; padding-top: 5px; padding-bottom: 5px; font-size: 16px;
+}
+h2 a {
+	color: rgb(34, 51, 85);
+}
+.postfoot a {
+	color: rgb(34, 51, 85);
+}
+h1 a:visited {
+	color: rgb(255, 255, 255); text-decoration: none; margin-top: 10px;
+}
+h1 a:active {
+	color: rgb(255, 255, 255); text-decoration: none; margin-top: 10px;
+}
+h1 a:link {
+	color: rgb(255, 255, 255); text-decoration: none; margin-top: 10px;
+}
+h1 a:hover {
+	color: rgb(255, 255, 255); text-decoration: none; margin-top: 10px;
+}
+h2 {
+	font-size: 1em; margin-top: 10px;
+}
+h5 {
+	margin: 0px; padding: 0px;
+}
+#top {
+	background-position: right; height: 90px; padding-left: 10px; vertical-align: middle; background-image: url("Images/HeaderBg.jpg"); background-color: rgb(32, 55, 95);
+}
+#top td {
+	text-align: left; color: white; filter: shadow(color=#333333,direction=120,enabled=1,strength=5) glow(color=#2B446F,enabled=1,strength=1);
+}
+#top h1 {
+	font-weight: normal;
+}
+#sub {
+	padding: 4px; color: rgb(204, 204, 204); font-size: 12px; background-image: url("images/SubHeaderBg.gif"); background-color: black;
+}
+#sub-right {
+	float: right;
+}
+#sub a:active {
+	color: white; text-decoration: none;
+}
+#sub a:visited {
+	color: white; text-decoration: none;
+}
+#sub a:link {
+	color: white; text-decoration: none;
+}
+#sub a:hover {
+	text-decoration: underline;
+}
+.headermaintitle {
+	font-family: "Trebuchet MS";
+}
+#tagline {
+	margin: 0px; padding: 5px; color: rgb(255, 255, 255); font-size: 1em; background-color: rgb(0, 0, 255);
+}
+p.date img {
+	vertical-align: middle;
+}
+p.date {
+	padding: 2px 0px; text-align: right; color: rgb(170, 170, 170); font-size: 1em; font-weight: bold; margin-bottom: 0px;
+}
+p.date span {
+	background-color: rgb(255, 255, 255);
+}
+p.date a {
+	color: rgb(136, 136, 136);
+}
+blockquote {
+	margin: 0px; padding: 4px; font-style: italic;
+}
+#leftmenu {
+	padding: 0px 0px 5px; left: 0px;
+}
+#leftmenu h3 {
+	background-position: bottom; margin: 0px; padding: 5px; color: rgb(102, 102, 102); font-size: 1em; background-image: url("images/ColumnHeaderBg.gif"); background-repeat: repeat-x; background-color: rgb(238, 238, 238);
+}
+#leftmenu ul {
+	list-style: none; margin: 0px 0px 10px 8px; padding: 0px;
+}
+#leftmenu li {
+	margin-top: 6px;
+}
+#leftmenu a:active {
+	padding: 2px; color: rgb(0, 0, 0); text-decoration: none; margin-right: 0px;
+}
+#leftmenu a:visited {
+	padding: 2px; color: rgb(0, 0, 0); text-decoration: none; margin-right: 0px;
+}
+#leftmenu a:link {
+	padding: 2px; color: rgb(0, 0, 0); text-decoration: none; margin-right: 0px;
+}
+#leftmenu a:hover {
+	color: rgb(29, 88, 209); text-decoration: underline;
+}
+#main {
+	margin-left: 5px;
+}
+#footer {
+	margin: 0px; text-align: center; padding-top: 5px; font-size: 12px;
+}
+input.text {
+	width: 300px;
+}
+textarea {
+	width: 300px; height: 200px;
+}
+#comments h4 span {
+	color: rgb(153, 153, 153);
+}
+#comments h4 {
+	margin: 0px; font-size: 0.9em;
+}
+p {
+	margin: 0px 0px 14px;
+}
+h3 {
+	font-size: 1.2em;
+}
+#relatedlinks ul {
+	list-style: none; padding: 0px; margin-left: 10px;
+}
+.post {
+	border-width: 1px 2px 2px 1px; border-style: solid; border-color: rgb(204, 204, 204); padding: 0px; margin-top: 10px; margin-bottom: 28px;
+}
+.posthead {
+	background-position: 5px; padding: 4px 4px 4px 25px; color: rgb(68, 68, 68); font-size: 13px; border-bottom-color: rgb(204, 204, 204); border-bottom-width: 1px; border-bottom-style: solid; background-image: url("images/icon-titledoc.gif"); background-repeat: no-repeat; background-color: rgb(238, 238, 238);
+}
+.postbody {
+	padding: 20px 10px 4px; line-height: 1.5; margin-bottom: 14px;
+}
+.posthead h2 {
+	margin: 0px; font-size: 12px;
+}
+.post h5 {
+	margin: 0px 0px 4px; font-size: 14px;
+}
+.postfoot {
+	margin: 0px; padding: 4px; color: rgb(170, 170, 170); font-size: 11.5px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; border-top-style: solid;
+}
+pre {
+	margin: 0px 0px 0px 22px; font-size: 1em;
+}
+.Textbox {
+	border: 1px solid rgb(170, 170, 170); width: 160px; font-size: 12px;
+}
+textarea {
+	border: 1px solid rgb(170, 170, 170); width: 160px; font-size: 12px;
+}
+.button {
+	border: 1px solid rgb(170, 170, 170); background-color: rgb(204, 212, 224);
+}
+input {
+	font-family: Verdana, Geneva, Arial, Sans-Serif; font-size: 12px;
+}
+textarea {
+	font-family: Verdana, Geneva, Arial, Sans-Serif; font-size: 12px;
+}
+.Framework {
+	border: 1px solid black; background-color: white;
+}
+.MainCell {
+	padding: 10px; font-size: 12px; vertical-align: top; background-color: white;
+}
+.LeftCell {
+	width: 220px; vertical-align: top;
+}
+.FooterCell {
+	height: 30px; vertical-align: top;
+}
+.SectionHead {
+	text-align: right;
+}
+.HeaderBar {
+	font-size: 0.75em; font-weight: normal; border-collapse: collapse; background-image: url("images/BlueTabBack.gif"); background-repeat: repeat-x;
+}
+.HeaderBarTabWindow {
+	background-image: url("images/BlueTabRight.gif"); background-repeat: no-repeat;
+}
+.HeaderBar a:visited {
+	color: whitesmoke; font-weight: normal; text-decoration: none;
+}
+.HeaderBar a:active {
+	color: whitesmoke; font-weight: normal; text-decoration: none;
+}
+.HeaderBar a:link {
+	color: whitesmoke; font-weight: normal; text-decoration: none;
+}
+.HeaderBarTab {
+	padding: 0px; border-collapse: collapse; background-image: url("images/BlueTabFace.gif"); background-repeat: repeat-x;
+}
+#rightmenu {
+	padding: 0px 0px 5px; left: 0px; width: 180px;
+}
+#rightmenu h3 {
+	margin: 0px; padding: 4px; color: rgb(102, 102, 102); font-size: 1em; background-image: url("images/ColumnHeaderBg.gif"); background-repeat: repeat-x;
+}
+#rightmenu ul {
+	list-style: none; margin: 0px 0px 10px 8px; padding: 0px;
+}
+#rightmenu li {
+	margin-top: 6px;
+}
+#rightmenu a:active {
+	padding: 2px; border: 1px solid rgb(170, 170, 170); font-weight: bold; text-decoration: none; margin-right: 0px; display: block;
+}
+#rightmenu a:visited {
+	padding: 2px; border: 1px solid rgb(170, 170, 170); font-weight: bold; text-decoration: none; margin-right: 0px; display: block;
+}
+#rightmenu a:link {
+	padding: 2px; border: 1px solid rgb(170, 170, 170); font-weight: bold; text-decoration: none; margin-right: 0px; display: block;
+}
+#rightmenu a:hover {
+	color: rgb(29, 88, 209); text-decoration: underline; background-color: white;
+}
+.quote {
+	border-width: 1px 1px 1px 10px; border-style: dashed dashed dashed solid; border-color: rgb(170, 170, 170); margin: 0px 15px 10px 35px; color: black; padding-left: 10px; background-color: whitesmoke;
+}
+#cell {
+	margin: 20px 0px 10px 10px; border: 1px solid rgb(221, 221, 221); width: 220px; padding-right: 0px; padding-bottom: 5px;
+}
+.file {
+	background: url("images/icon-edit.gif") no-repeat left top; padding-left: 20px;
+}
+.download {
+	background: url("images/icon-download.gif") no-repeat left top; padding-left: 20px;
+}
+.zip {
+	background: url("images/icon-zip.gif") no-repeat left top; padding-left: 20px;
+}
+.tip {
+	background: url("images/icon-tip.gif") no-repeat left top; padding-left: 20px;
+}
+.question {
+	background: url("images/icon-question.gif") no-repeat left top; padding-left: 20px;
+}
+.link {
+	padding-left: 20px;
+}
+.blog {
+	background: url("images/icon-blog.gif") no-repeat left top; padding-left: 20px;
+}
+.DayHeader {
+	height: 30px; color: rgb(102, 102, 102); padding-top: 0px; padding-bottom: 0px; font-size: 1em; margin-top: 0px; margin-bottom: 0px; background-image: url("images/ColumnHeaderBg.gif"); background-repeat: repeat-x; background-color: rgb(238, 238, 238);
+}
+#Cal {
+	margin: 20px 0px 10px 10px; border: 1px solid rgb(221, 221, 221); width: 220px; padding-right: 0px; padding-bottom: 0px;
+}
+.border {
+	border: 1px dashed rgb(0, 153, 0);
+}
+.RecentComment {
+	padding-right: 5px;
+}
+#news {
+	padding-left: 5px; font-size: 13px;
+}
+.div_my_zzk {
+	margin-left: 5px;
+}
+.input_my_zzk {
+	width: 130px;
+}
+input.btn_my_zzk {
+	border: 0px currentColor;
+}
+.cal {
+	width: 100%;
+}
+.side_left_list {
+	width: 200px; overflow: hidden;
+}
+.ad_side {
+	text-align: center;
+}
+.cnblogs_code {
+	max-width: 900px;
+}
+#RecentCommentsBlock {
+	width: 210px; overflow: hidden;
+}
+#blogCalendar td {
+	padding: 5px 0px;
+}

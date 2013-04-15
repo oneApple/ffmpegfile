@@ -1,0 +1,1 @@
+-i gaoqing_mpeg2.ts -vcodec mpeg2video -acodec copy -b 2500 -qscale 4 out.ts

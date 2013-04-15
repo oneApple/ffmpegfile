@@ -1,0 +1,707 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0054)http://blog.csdn.net/xia2012sj/article/details/6658841 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>FFmpeg框架解读 -  - 博客频道 - CSDN.NET</title>
+
+<meta name="description" content="1、    FFMEPG结构说明    1.1》介绍    ffmpeg(Fast Forward Moving Pictures Experts Group)是音视频的分离，转换，编码解码及流媒体的完全解决方案，其中最重要的就是libavcodec库，是一个集录制、转换">
+<script type="text/javascript" async="" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ga.js"></script><script src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ad.js"></script>
+<link rel="Stylesheet" type="text/css" href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/style.css">
+<link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/xia2012sj/rss/list">
+<link rel="shortcut icon" href="http://blog.csdn.net/favicon.ico">
+<link type="text/css" rel="stylesheet" href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/default.css">
+<link type="text/css" rel="stylesheet" href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/style(1).css"></head>
+<body>
+<script src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/pub_topnav_2011.js" type="text/javascript"></script><link rel="stylesheet" type="text/css" href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/navtop_2012.css">
+<div class="nav_top_2011">
+<p><span style="color:red;">您还未登录！</span>|<a href="https://passport.csdn.net/account/login" target="_top">登录</a>|<a href="https://passport.csdn.net/account/register" target="_top">注册</a>|<a href="https://passport.csdn.net/help/faq" target="_blank">帮助</a></p><ul>
+<li><a href="http://www.csdn.net/" target="_blank">首页</a></li>
+<li><a href="http://news.csdn.net/" target="_blank">业界</a></li>
+<li><a href="http://mobile.csdn.net/" target="_blank">移动</a></li>
+<li><a href="http://cloud.csdn.net/" target="_blank">云计算</a></li>
+<li><a href="http://sd.csdn.net/" target="_blank">研发</a></li>
+<li><a href="http://bbs.csdn.net/" target="_blank">论坛</a></li>
+<li><a href="http://blog.csdn.net/" target="_blank">博客</a></li>
+<li><a href="http://download.csdn.net/" target="_blank">下载</a></li>
+<li class="more"><h2 id="topnav_btnmore" onclick="showNavMore(this)"><a href="javascript:void(0);">更多</a></h2>
+<div id="topnav_hidlist">
+<iframe name="nav_frm" src="about:blank" width="92" height="178" scrolling="no" frameborder="no"></iframe>
+</div>
+</li>
+</ul>
+</div>
+
+<div id="container">
+<div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h1><a href="http://blog.csdn.net/xia2012sj"></a></h1>
+            <h2></h2>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg"></div>
+    <div class="navigator">
+        <ul>
+            <li id="btnContents"><a href="http://blog.csdn.net/xia2012sj?viewmode=contents"><span><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+            <li id="btnView"><a href="http://blog.csdn.net/xia2012sj?viewmode=list"><span><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+            <li id="btnRss"><a href="http://blog.csdn.net/xia2012sj/rss/list"><span><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>
+</ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "xia2012sj";
+    var blog_address = "http://blog.csdn.net/xia2012sj";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";
+</script>
+        
+<div id="body">
+<div id="main">
+<div class="main">
+<div class="notice"> 
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/8687376" target="_blank">
+<font color="blue">2013年7月微软MVP申请开始啦！ 
+   </font></a>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/8664620" target="_blank"><font color="blue">CSDN博客移动开发排行榜 
+</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/8699892" target="_blank"><font color="blue">参与活动送签名技术书籍 
+
+
+</font></a>
+
+<br>
+
+
+
+
+
+<a href="http://bbs.csdn.net/topics/390397409" target="_blank">
+<font color="red">【有奖提问】CSDN论坛第1期专家问答开始
+
+
+ </font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/8717564" target="_blank">
+<font color="red">来极客头条，赢下载积分
+ </font></a>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://bbs.csdn.net/topics/390393217" target="_blank">
+<font color="red">下载频道3月领任务~赚下载分！ 
+  </font></a>
+
+
+</div><div id="article_details" class="details">
+    <div class="article_title">
+    <span class="ico ico_type_Repost"></span>
+    <h3>
+        <span class="link_title"><a href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/FFmpeg框架解读 - - 博客频道 - CSDN.NET.htm">
+        FFmpeg框架解读
+        </a></span>
+    </h3>
+</div>
+
+        
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/xia2012sj/article/category/847220">ffmpeg</a> 
+        </span>
+    <span class="link_postdate">2011-08-04 09:45</span>
+    <span class="link_view" title="阅读次数">591人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/xia2012sj/article/details/6658841#comments">评论</a>(0)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:collectArticle(&#39;FFmpeg框架解读&#39;,&#39;6658841&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/xia2012sj/article/details/6658841#report" onclick="javascript:report(6658841,2);return false;" title="举报">举报</a></span>
+    
+</div>
+<div class="tag2box"><a href="http://blog.csdn.net/tag/details.html?tag=%e6%a1%86%e6%9e%b6" target="_blank">框架</a><a href="http://blog.csdn.net/tag/details.html?tag=codec" target="_blank">codec</a><a href="http://blog.csdn.net/tag/details.html?tag=input" target="_blank">input</a><a href="http://blog.csdn.net/tag/details.html?tag=stream" target="_blank">stream</a><a href="http://blog.csdn.net/tag/details.html?tag=video" target="_blank">video</a><a href="http://blog.csdn.net/tag/details.html?tag=output" target="_blank">output</a></div>
+
+
+    
+<div id="article_content" class="article_content">
+
+<span style="font-size:18px">1、&nbsp;&nbsp;&nbsp; FFMEPG结构说明<br>
+&nbsp;&nbsp;&nbsp; 1.1》介绍<br>
+&nbsp;&nbsp;&nbsp; ffmpeg(Fast Forward Moving Pictures Experts Group)是音视频的分离，转换，编码解码及流媒体的完全解决方案，其中最重要的就是libavcodec库，是一个集录制、转换、音/视频编码解码功能为一体的完整的开源解决方案。ffmpeg的开发是基于Linux操作系统，但是可以在大多数操作系统中编译和使用。FFmpeg支持MPEG、DivX、MPEG4、AC3、DV、FLV等40多种编码，AVI、MPEG、OGG、Matroska、ASF等90多种解码. TCPMP,
+ VLC, MPlayer等开源播放器都用到了FFmpeg。<br>
+ffmpeg主目录下主要有libavcodec、libavformat和libavutil等子目录。其中<br>
+&nbsp;&nbsp;&nbsp; libavcodec用于存放各个encode/decode模块，CODEC其实是Coder/Decoder的缩写，也就是编码解码器；用于各种类型声音/图像编解码<br>
+&nbsp;&nbsp;&nbsp; libavformat用于存放muxer/demuxer模块，对音频视频格式的解析;用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构和读取音视频帧等功能；<br>
+其中库 libavcodec，libavformat用于对媒体文件进行处理，如格式的转换；<br>
+&nbsp;&nbsp;&nbsp; libavutil集项工具，包含一些公共的工具函数；用于存放内存操作等辅助性模块，是一个通用的小型函数库，该库中实现了CRC校验码的产生，128位整数数学，最大公约数，整数开方，整数取对数，内存分配，大端小端格式的转换等功能<br>
+&nbsp;&nbsp;&nbsp; libavdevice：对输出输入设备的支持；<br>
+&nbsp;&nbsp;&nbsp; libpostproc：用于后期效果处理；<br>
+&nbsp;&nbsp;&nbsp; libswscale：用于视频场景比例缩放、色彩映射转换；<br>
+&nbsp;&nbsp;&nbsp; ffmpeg：该项目提供的一个工具，可用于格式转换、解码或电视卡即时编码等；<br>
+&nbsp;&nbsp;&nbsp; fsever：一个 HTTP 多媒体即时广播串流服务器；<br>
+&nbsp;&nbsp;&nbsp; ffplay：是一个简单的播放器，使用ffmpeg 库解析和解码，通过SDL显示；<br>
+&nbsp;&nbsp;&nbsp; ffmpeg软件包经编译过后将生成三个可执行文件，ffmpeg，ffserver，ffplay。其中ffmpeg用于对媒体文件进行处理，ffserver是一个http的流媒体服务器，ffplay是一个基于SDL的简单播放器。<br>
+&nbsp;&nbsp;&nbsp; <br>
+说明：<br>
+&nbsp;&nbsp;&nbsp; muxer/demuxer和encoder/decoder的区别：<br>
+&nbsp;&nbsp;&nbsp; 最大的差别是muxer 和demuxer分别是不同的结构AVOutputFormat与AVInputFormat；<br>
+&nbsp;&nbsp;&nbsp; 而encoder和decoder都是用的AVCodec 结构。<br>
+&nbsp;&nbsp;&nbsp; muxer/demuxer是分别保存在全局变量AVOutputFormat *first_oformat与AVInputFormat *first_iformat中的。encoder/decoder都是保存在全局变量AVCodec *first_avcodec中的。<br>
+&nbsp;&nbsp;&nbsp; muxer/demuxer和encoder/decoder的相同之处：<br>
+&nbsp;&nbsp;&nbsp; 都是在main()开始的av_register_all()函数内初始化的 <br>
+&nbsp;&nbsp;&nbsp; 都是以链表的形式保存在全局变量中的<br>
+&nbsp;&nbsp;&nbsp; 都用函数指针的方式作为开放的公共接口<br>
+<br>
+&nbsp;&nbsp;&nbsp; 1.2》下载与编译<br>
+&nbsp;&nbsp;&nbsp; 官方下载网址http://ffmpeg.org/download.html<br>
+&nbsp;&nbsp;&nbsp; 编译./configure<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; #make<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; #make install<br>
+安装到/usr/local/bin、/usr/local/include（包含各个头文件）、/usr/local/lib（生成.a文件），编译完毕后<br>
+&nbsp;&nbsp;&nbsp; A》执行./ffmpeg，结果如下：<br>
+FFmpeg version SVN-r17579, Copyright (c) 2000-2009 Fabrice Bellard, et al.<br>
+&nbsp; configuration: <br>
+&nbsp; libavutil&nbsp;&nbsp;&nbsp;&nbsp; 49.15. 0 / 49.15. 0<br>
+&nbsp; libavcodec&nbsp;&nbsp;&nbsp; 52.19. 0 / 52.19. 0<br>
+&nbsp; libavformat&nbsp;&nbsp; 52.30. 0 / 52.30. 0<br>
+&nbsp; libavdevice&nbsp;&nbsp; 52. 1. 0 / 52. 1. 0<br>
+&nbsp; built on Mar 25 2011 17:30:17, gcc: 4.3.4<br>
+At least one output file must be specified<br>
+&nbsp;&nbsp;&nbsp; B》执行./ffplay，结果如下：<br>
+FFplay version SVN-r17579, Copyright (c) 2003-2009 Fabrice Bellard, et al.<br>
+&nbsp; configuration: <br>
+&nbsp; libavutil&nbsp;&nbsp;&nbsp;&nbsp; 49.15. 0 / 49.15. 0<br>
+&nbsp; libavcodec&nbsp;&nbsp;&nbsp; 52.19. 0 / 52.19. 0<br>
+&nbsp; libavformat&nbsp;&nbsp; 52.30. 0 / 52.30. 0<br>
+&nbsp; libavdevice&nbsp;&nbsp; 52. 1. 0 / 52. 1. 0<br>
+&nbsp; built on Mar 25 2011 17:30:17, gcc: 4.3.4<br>
+An input file must be specified<br>
+&nbsp;&nbsp;&nbsp; C》执行./ffserver，结果如下：<br>
+FFserver version SVN-r17579, Copyright (c) 2000-2009 Fabrice Bellard, et al.<br>
+&nbsp; configuration: <br>
+&nbsp; libavutil&nbsp;&nbsp;&nbsp;&nbsp; 49.15. 0 / 49.15. 0<br>
+&nbsp; libavcodec&nbsp;&nbsp;&nbsp; 52.19. 0 / 52.19. 0<br>
+&nbsp; libavformat&nbsp;&nbsp; 52.30. 0 / 52.30. 0<br>
+&nbsp; libavdevice&nbsp;&nbsp; 52. 1. 0 / 52. 1. 0<br>
+&nbsp; built on Mar 25 2011 17:30:17, gcc: 4.3.4<br>
+/etc/ffserver.conf: No such file or directory<br>
+Incorrect config file - exiting.<br>
+说明：如果缺少fserver.conf文件，需在/etc/中增加ffserver.conf文件。<br>
+<br>
+2、&nbsp;&nbsp;&nbsp; Ffmpeg编码、解码<br>
+&nbsp;&nbsp;&nbsp; 2.1》主要流程如下：<br>
+&nbsp;&nbsp;&nbsp; 输入流初始化input streams initializing<br>
+&nbsp;&nbsp;&nbsp; 输出流初始化output streams initializing<br>
+&nbsp;&nbsp;&nbsp; 编码器和解码器初始化encoders and decoders initializing<br>
+&nbsp;&nbsp;&nbsp; 如有需要的情况下，设置来自输入文件的Meta数据信息set meta data information from input file if required.<br>
+&nbsp;&nbsp;&nbsp; 写输出文件头文件write output files header<br>
+&nbsp;&nbsp;&nbsp; 循环处理每个数据单元loop of handling each frame（frame是指Stream中的一个数据单元）<br>
+&nbsp;&nbsp;&nbsp; 从输入文件中读取数据单元read frame from input file:<br>
+&nbsp;&nbsp;&nbsp; 解码数据单元内数据decode frame data<br>
+&nbsp;&nbsp;&nbsp; 编码数据单元内数据encode new frame data<br>
+&nbsp;&nbsp;&nbsp; 写新的数据单元到输出文件中write new frame to output file<br>
+&nbsp;&nbsp;&nbsp; 写输出文件的尾文件write output files trailer<br>
+&nbsp;&nbsp;&nbsp; 关闭每个编码器和解码器close each encoder and decoder <br>
+说明：<br>
+&nbsp;&nbsp;&nbsp; av_encode函数是FFMpeg中最重要的函数，编码/解码和输出等大部分功能都在此函数完成。ffmpeg.c中av_encode(AVFormatContext **output_files,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int nb_output_files,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVFormatContext **input_files,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int nb_input_files,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVStreamMap *stream_maps, int nb_stream_maps) <br>
+<br>
+&nbsp;&nbsp;&nbsp; AVFormatContext是FFMpeg格式转换过程中实现输入和输出功能、保存相关数据的主要结构。每一个输入和输出文件，都在如下定义的指针数组全局变量中有对应的实体。<br>
+&nbsp;&nbsp;&nbsp; static AVFormatContext *output_files[MAX_FILES];<br>
+&nbsp;&nbsp;&nbsp; static AVFormatContext *input_files[MAX_FILES];<br>
+&nbsp;&nbsp;&nbsp; 对于输入和输出，因为共用的是同一个结构体，所以需要分别对该结构中如下定义的iformat或oformat成员赋值。<br>
+&nbsp;&nbsp;&nbsp; struct AVInputFormat *iformat;<br>
+&nbsp;&nbsp;&nbsp; struct AVOutputFormat *oformat;<br>
+&nbsp;&nbsp;&nbsp; 对一个AVFormatContext来说，这二个成员不能同时有值，即一个AVFormatContext不能同时含有demuxer和muxer。在main( )函数开头的parse_options( )函数中找到了匹配的muxer和demuxer之后，根据传入的argv参数，初始化每个输入和输出的AVFormatContext结构，并保存在相应的output_files和input_files指针数组中。在av_encode( )函数中，output_files和input_files是作为函数参数传入后，在其他地方就没有用到了。<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp; AVCodecContext保存AVCodec指针和与codec相关数据，如video的width、height，audio的sample rate等。AVCodecContext中的codec_type，codec_id二个变量对于encoder/decoder的匹配来说，最为重要。<br>
+&nbsp;&nbsp;&nbsp; enum CodecType codec_type;&nbsp;&nbsp;&nbsp;&nbsp; /* see CODEC_TYPE_xxx */<br>
+&nbsp;&nbsp;&nbsp; enum CodecID codec_id;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* see CODEC_ID_xxx */<br>
+&nbsp;&nbsp;&nbsp; codec_type保存的是CODEC_TYPE_VIDEO，CODEC_TYPE_AUDIO等媒体类型，codec_id保存的是CODEC_ID_FLV1，CODEC_ID_VP6F等编码方式。<br>
+&nbsp; <br>
+&nbsp;&nbsp;&nbsp; AVStream结构保存与数据流相关的编解码器，数据段等信息。比较重要的有如下二个成员：<br>
+&nbsp;&nbsp;&nbsp; AVCodecContext *codec; /**&lt; codec context */<br>
+&nbsp;&nbsp;&nbsp; void *priv_data;<br>
+&nbsp;&nbsp;&nbsp; 其中codec指针保存的就是encoder或decoder结构。priv_data指针保存的是和具<br>
+体编解码流相关的数据。<br>
+<br>
+&nbsp;&nbsp;&nbsp; AVInputStream/ AVOutputStream根据输入和输出流的不同，前述的AVStream结构都是封装在AVInputStream和AVOutputStream结构中，在av_encode( )函数中使用。AVInputStream中还保存的有与时间有关的信息。AVOutputStream中还保存有与音视频同步等相关的信息。&nbsp;&nbsp;&nbsp;
+<br>
+<br>
+&nbsp;&nbsp;&nbsp; 2.2》视频文件解码流程<br>
+&nbsp;&nbsp;&nbsp; A》初始化 libavcodec库，并注册所有容器格式（format）、编解码器CODEC、，解析器（parsers）以及码流过滤器（bitstream filters），打开一个文件时，自动选择相应的文件格式和编码器：<br>
+&nbsp;&nbsp;&nbsp; avcodec_register_all();<br>
+&nbsp;&nbsp;&nbsp; avdevice_register_all();<br>
+&nbsp;&nbsp;&nbsp; av_register_all(); <br>
+&nbsp;&nbsp;&nbsp; avformat_alloc_context();分配播放avformat的上下文，分配输出媒体内容。<br>
+<br>
+&nbsp;&nbsp;&nbsp; B》打开文件: av_open_input_file()<br>
+&nbsp;&nbsp;&nbsp; int av_open_input_file(AVFormatContext **ic_ptr, const char *filename,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVInputFormat *fmt,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int buf_size,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVFormatParameters *ap)<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ......<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; if (!fmt) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; /* guess format if no file can be opened */<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; fmt = av_probe_input_format(pd, 0);<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; }<br>
+&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;......<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; err = av_open_input_stream(ic_ptr, pb, filename, fmt, ap);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ......<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; 主要是两件事情：<br>
+&nbsp;&nbsp;&nbsp; 侦测容器文件格式（是在AVFormatContext定义中）；<br>
+&nbsp;&nbsp;&nbsp; 从容器文件获取Stream的信息，就是调用特定文件的demuxer以分离Stream的过程，描述如下:<br>
+av_open_input_file<br>
+&nbsp;&nbsp;&nbsp; av_probe_input_format2()从first_iformat中遍历注册的所有demuxer以调用相应的probe函数<br>
+&nbsp;&nbsp;&nbsp; av_open_input_stream()调用指定demuxer的read_header函数以获取相关流的信息ic-&gt;iformat-&gt;read_header<br>
+<br>
+&nbsp;&nbsp;&nbsp; C》从文件中提取流信息: av_find_stream_info()用有效的信息把 AVFormatContext 的流域（streams field）填满。对于音频／视频每个Packet包含完整的或多个复合的frame。从文件中读取packet，从Packet中解码相应的frame。<br>
+&nbsp;&nbsp;&nbsp; av_find_stream_info(AVFormatContext *ic)主要是两部分：<br>
+&nbsp;&nbsp;&nbsp; 一部分是使用av_open_input_file()解复用(demuxer)<br>
+&nbsp;&nbsp;&nbsp; 然后是使用av_read_frame(AVFormatContext *s, AVPacket *pkt)和 avcodec_decode_video() 解码(decode)<br>
+<br>
+&nbsp;&nbsp;&nbsp; D》遍历所有的流，查找其中种类为CODEC_TYPE_VIDEO，描叙如下：<br>
+int i;<br>
+AVCodecContext *pCodecCtx;<br>
+<br>
+// Find the first video stream<br>
+videoStream=-1;<br>
+for(i=0; i&lt;pFormatCtx-&gt;nb_streams; i++)<br>
+&nbsp; if(pFormatCtx-&gt;streams[i]-&gt;codec-&gt;codec_type==CODEC_TYPE_VIDEO) {<br>
+&nbsp;&nbsp;&nbsp; videoStream=i;<br>
+&nbsp;&nbsp;&nbsp; break;<br>
+&nbsp; }<br>
+if(videoStream==-1)<br>
+&nbsp; return -1; // Didn't find a video stream<br>
+<br>
+// Get a pointer to the codec context for the video stream<br>
+pCodecCtx=pFormatCtx-&gt;streams[videoStream]-&gt;codec;<br>
+<br>
+&nbsp;&nbsp;&nbsp; E》查找对应的解码器: avcodec_find_decoder()；若成功后，打开解码器 avcodec_open()用给定的 AVCodec来初始化AVCodecContext，描叙如下：<br>
+AVCodec *pCodec;<br>
+<br>
+// Find the decoder for the video stream<br>
+pCodec=avcodec_find_decoder(pCodecCtx-&gt;codec_id);<br>
+if(pCodec==NULL) {<br>
+&nbsp; return -1; // Codec not found<br>
+}<br>
+// Open codec<br>
+if(avcodec_open(pCodecCtx, pCodec)&lt;0)<br>
+&nbsp; return -1; // Could not open codec<br>
+<br>
+&nbsp;&nbsp;&nbsp; F》为解码帧分配内存: avcodec_alloc_frame()，用于存在帧数据<br>
+<br>
+&nbsp;&nbsp;&nbsp; G》不停地从解码流中提取中帧数据: av_read_frame()<br>
+int frameFinished;<br>
+AVPacket packet;<br>
+<br>
+i=0;<br>
+while(av_read_frame(pFormatCtx, &amp;packet)&gt;=0) {<br>
+&nbsp; // Is this a packet from the video stream?<br>
+&nbsp; if(packet.stream_index==videoStream) {<br>
+&nbsp;&nbsp;&nbsp; // Decode video frame<br>
+&nbsp;&nbsp;&nbsp; avcodec_decode_video(pCodecCtx, pFrame, &amp;frameFinished,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; packet.data, packet.size);<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp; // Did we get a video frame?<br>
+&nbsp;&nbsp;&nbsp; if(frameFinished) {<br>
+&nbsp;&nbsp;&nbsp; // Convert the image from its native format to RGB32<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; img_convert((AVPicture *)pFrameRGB, PIX_FMT_RGB32, <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (AVPicture*)pFrame, pCodecCtx-&gt;pix_fmt, <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; pCodecCtx-&gt;width, pCodecCtx-&gt;height);<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Save the frame to disk<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ......<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp; // Free the packet that was allocated by av_read_frame<br>
+&nbsp; av_free_packet(&amp;packet);<br>
+}<br>
+&nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp; H》判断帧的类型，对于视频帧调用指定Codec的解码函数: avcodec_decode_video()<br>
+&nbsp;&nbsp;&nbsp; I》解码完后，释放解码器: avcodec_close() <br>
+&nbsp;&nbsp;&nbsp; J》关闭输入文件:av_close_input_file()<br>
+<br>
+3、&nbsp;&nbsp;&nbsp; 代码标记Log<br>
+&nbsp;&nbsp;&nbsp; 根据2.2》项中所描述的视频解码流程，作Log标记（用printf()方法输出）、跟踪视频解码过程。从ffmpeg自带的ffplay播放器着手，跟踪ffplay.c的主函数main()中涉及的调用函数。<br>
+/* Called from the main */<br>
+int main(int argc, char **argv)<br>
+{<br>
+&nbsp;&nbsp;&nbsp; /* register all codecs, demux and protocols */<br>
+&nbsp;&nbsp;&nbsp; avcodec_register_all();<br>
+&nbsp;&nbsp;&nbsp; avdevice_register_all();<br>
+&nbsp;&nbsp;&nbsp; av_register_all();<br>
+&nbsp;&nbsp;&nbsp; ......<br>
+&nbsp;&nbsp;&nbsp; avformat_opts = avformat_alloc_context();<br>
+&nbsp;&nbsp;&nbsp; sws_opts = sws_getContext(16,16,0, 16,16,0, sws_flags, NULL,NULL,NULL);<br>
+&nbsp;&nbsp;&nbsp; show_banner();<br>
+&nbsp;&nbsp;&nbsp; parse_options(argc, argv, options, opt_input_file);<br>
+&nbsp;&nbsp;&nbsp; ......<br>
+&nbsp;&nbsp;&nbsp; cur_stream = stream_open(input_filename, file_iformat);<br>
+event_loop();<br>
+<br>
+&nbsp;&nbsp;&nbsp; /* never returns */<br>
+&nbsp;&nbsp;&nbsp; return 0;<br>
+}<br>
+&nbsp;&nbsp;&nbsp; 跟踪结果如下：<br>
+root@localhost /work/ffmpeg&gt;ffplay /work/test/avi/output.avi<br>
+beginning avcodec_register_all... _by jay remarked<br>
+beginning avdevice_register_all... _by jay remarked<br>
+beginning av_register_all... _by jay remarked<br>
+registering MuxDemux MP3... _by jay remarked<br>
+returning av_register_all's initialized<br>
+<br>
+avctx_opts[0]<br>
+avctx_opts[1]<br>
+avctx_opts[2]<br>
+avctx_opts[3]<br>
+avctx_opts[4]<br>
+returning avformat_alloc_context value..._by jay remarked<br>
+returning sws_getContex value..._by jay remarked<br>
+<br>
+showing version banner..._by jay remarked<br>
+FFplay version SVN-r17579 _by Jay remarked, Copyright (c) 2003-2009 Fabrice Bellard, et al.<br>
+&nbsp; configuration: <br>
+&nbsp; libavutil&nbsp;&nbsp;&nbsp;&nbsp; 49.15. 0 / 49.15. 0<br>
+&nbsp; libavcodec&nbsp;&nbsp;&nbsp; 52.19. 0 / 52.19. 0<br>
+&nbsp; libavformat&nbsp;&nbsp; 52.30. 0 / 52.30. 0<br>
+&nbsp; libavdevice&nbsp;&nbsp; 52. 1. 0 / 52. 1. 0<br>
+&nbsp; built on Apr&nbsp; 1 2011 09:29:06, gcc: 4.3.4<br>
+<br>
+beginning parse_options... _by jay remarked<br>
+returning optindex=[2]<br>
+beginning av_init_packet... _by jay remarked<br>
+beginning cur_stream... _by jay remarked<br>
+returning av_open_input_file's pd-&gt;filename=[T]<br>
+[mp3 @ 0x9b26d20]mdb:432, lastbuf:0 skipping granule 0<br>
+&nbsp;&nbsp;&nbsp; Last message repeated 1 times<br>
+[mp3 @ 0x9b26d20]mdb:432, lastbuf:0 skipping granule 1<br>
+&nbsp;&nbsp;&nbsp; Last message repeated 1 times<br>
+[mp3 @ 0x9b26d20]mdb:460, lastbuf:216 skipping granule 0<br>
+&nbsp;&nbsp;&nbsp; Last message repeated 1 times<br>
+[mp3 @ 0x9b26d20]mdb:460, lastbuf:216 skipping granule 1<br>
+returning av_close_input_file successful</span><br>
+
+</div>
+<div class="share_buttons" id="sharePanel"><span>分享到：</span> <a name="sina" class="share_sina" title="分享到新浪微博"></a><a name="qq" class="share_qq" title="分享到腾讯微博"></a></div>
+<!--192.168.1.237-->
+<div class="article_next_prev">
+    <li class="prev_article"><span>上一篇：</span><a href="http://blog.csdn.net/xia2012sj/article/details/6653017">交换字符串最快的方法。</a></li>
+    <li class="next_article"><span>下一篇：</span><a href="http://blog.csdn.net/xia2012sj/article/details/6661818">RM文件解析之RM文件格式</a></li>
+</div>
+
+
+    
+</div>
+<div id="ad_cen"><iframe id="ad_frm_0" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 732px; height: 95px; " src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ad(1).htm"></iframe></div>
+<script type="text/javascript">
+    new Ad(4, 'ad_cen');
+</script>
+<div id="comment_title" class="panel_head">查看评论<a name="comments"></a></div>
+<div id="comment_list"><br>&nbsp;&nbsp;暂无评论<br><br><div class="clear"></div></div>
+<div id="comment_bar"></div>
+<div id="comment_form"><div class="guest_link">您还没有登录,请<a href="javascript:void(0);" onclick="javascript:csdn.showLogin(function (dat) {js_logined(dat.data.userName);});">[登录]</a>或<a href="http://passport.csdn.net/account/register?from=http%3A%2F%2Fblog.csdn.net%2Fxia2012sj%2Farticle%2Fdetails%2F6658841">[注册]</a></div></div>
+<div class="announce">* 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+<script type="text/javascript">
+    var fileName = '6658841';
+    var commentscount = 0;
+    var islock = false
+</script>
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/comment.js"></script>
+<div id="ad_bot"><iframe id="ad_frm_1" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 732px; height: 170px; " src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ad(2).htm"></iframe></div>
+<script type="text/javascript">
+    new Ad(5, 'ad_bot');
+</script>
+<div id="report_dialog"></div>
+
+<div id="d-top" style="">
+<a id="d-top-a" href="http://blog.csdn.net/xia2012sj/article/details/6658841#" title="回到顶部">
+<img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/top.png" alt="TOP"></a>
+</div>
+<script type="text/javascript">
+    $(function(){
+        var d_top=$('#d-top');
+        document.onscroll=function(){
+            var scrTop=(document.body.scrollTop||document.documentElement.scrollTop);
+            if(scrTop>500){
+                d_top.show();
+            }else{
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function(){
+            scrollTo(0,0);
+            this.blur();
+            return false;
+        });
+    });
+</script>
+
+
+
+<div class="clear"></div>
+</div>
+</div>
+
+<div id="side">
+<div class="side">
+<div id="panel_Profile" class="panel">
+    <ul class="panel_head"><span>个人资料</span></ul>
+    <ul class="panel_body profile">
+        <div id="blog_userface">
+            <a href="http://my.csdn.net/xia2012sj" target="_blank">
+            <img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/1_xia2012sj.jpg" title="访问我的空间" style="max-width:90%">
+            </a>
+            <br>
+            <span><a href="http://my.csdn.net/xia2012sj" class="user_name" target="_blank">浅雨夏梦</a></span>
+        </div>
+<div class="interact">
+<!--<a href="#" class="attented" title="已关注"></a>-->
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]"></a>
+<a href="javascript:void(0);" class="letter" onclick="loginto(1)" title="[发私信]"></a>
+</div>
+        <div id="blog_medal">
+        <div id="bms_box"><a href="http://medal.blog.csdn.net/allmedal.aspx" target="_blank"><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/holdon_s2.gif" onmouseover="m_over_m(this,0)" onmouseout="m_out_m()" alt=""></a></div></div>
+        <ul id="blog_rank">
+            <li>访问：<span>19862次</span></li>
+            <li>积分：<span>654分</span></li>
+            <li>排名：<span>第16376名</span></li>
+        </ul>
+        <ul id="blog_statistics">
+            <li>原创：<span>43篇</span></li>
+            <li>转载：<span>19篇</span></li>
+            <li>译文：<span>0篇</span></li>
+            <li>评论：<span>18条</span></li>
+        </ul>
+    </ul>
+</div>
+<script type="text/javascript">
+    var _blogger = 'xia2012sj';
+</script>
+
+
+
+<div class="panel" id="panel_Search">
+    <ul class="panel_head"><span>文章搜索</span></ul>
+    <ul class="panel_body">
+        <form id="frmSearch" action="http://so.csdn.net/search" class="form_search" target="_blank">
+        <span><input id="inputSearch" type="text" class="blogsearch" title="请输入关键字"></span>
+        <input id="btnSubmit" type="submit" value="搜索" title="search in blog">
+        <input type="hidden" name="q" id="inputQ">
+        <input type="hidden" name="t" value="blog">
+        <a id="btnSearchBlog" target="_blank"></a>
+        </form>
+    </ul>
+</div><div id="panel_Category" class="panel">
+    <ul class="panel_head"><span>文章分类</span></ul>
+    <ul class="panel_body">
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/847220">ffmpeg</a><span>(1)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/860362">StageFright</a><span>(9)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/869235">android</a><span>(12)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/873525">C/C++</a><span>(4)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/873865">工作心情</a><span>(7)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/884509">iPhone</a><span>(14)</span>
+        </li>
+        <li>
+        <a href="http://blog.csdn.net/xia2012sj/article/category/905382">MTK</a><span>(1)</span>
+        </li>
+    </ul>
+</div><div id="panel_Archive" class="panel">
+    <ul class="panel_head"><span>文章存档</span></ul>
+    <ul class="panel_body">
+        <div id="archive_list"><li><a href="http://blog.csdn.net/xia2012sj/article/month/2013/02">2013年02月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2012/06">2012年06月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2012/04">2012年04月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2012/03">2012年03月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/12">2011年12月</a><span>(5)</span></li><span class="hidelist" style="display:none;"><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/11">2011年11月</a><span>(11)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/10">2011年10月</a><span>(10)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/09">2011年09月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/08">2011年08月</a><span>(23)</span></li><li><a href="http://blog.csdn.net/xia2012sj/article/month/2011/07">2011年07月</a><span>(6)</span></li></span><div id="archive_list_button" class="list_closed">展开</div></div>
+    </ul>
+</div>
+<div id="hotarticls" class="panel">
+    <ul class="panel_head"><span>阅读排行</span></ul>
+    <ul class="panel_body itemlist">
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6698654" title="ADB命令大全">ADB命令大全</a><span>(1681)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/7053830" title="android TextView 自动换行">android TextView 自动换行</a><span>(1089)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6932708" title="Iphone 键盘消失">Iphone 键盘消失</a><span>(946)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6698618" title="android 命令大全">android 命令大全</a><span>(842)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6913001" title="Iphone虚拟键盘的消失">Iphone虚拟键盘的消失</a><span>(739)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6668590" title="StageFright学习笔记（1）">StageFright学习笔记（1）</a><span>(666)</span>
+        </li>
+        <li>
+            <a href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/FFmpeg框架解读 - - 博客频道 - CSDN.NET.htm" title="FFmpeg框架解读">FFmpeg框架解读</a><span>(591)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6952878" title="Iphone之UITableView">Iphone之UITableView</a><span>(579)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6617518" title="关于ffmpeg和opencore的学习">关于ffmpeg和opencore的学习</a><span>(542)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6661818" title="RM文件解析之RM文件格式">RM文件解析之RM文件格式</a><span>(498)</span>
+        </li>
+    </ul>
+</div>
+<div id="hotarticls2" class="panel">
+    <ul class="panel_head"><span>评论排行</span></ul>
+    <ul class="panel_body itemlist">
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/7035324" title="那些感触">那些感触</a><span>(6)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6668575" title="StageFright框架流程解读">StageFright框架流程解读</a><span>(2)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6952878" title="Iphone之UITableView">Iphone之UITableView</a><span>(2)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/7053830" title="android TextView 自动换行">android TextView 自动换行</a><span>(2)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6735558" title="CSDN中学习android的好博客">CSDN中学习android的好博客</a><span>(2)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/7333848" title="android 复杂的ontouch事件处理">android 复杂的ontouch事件处理</a><span>(2)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6932708" title="Iphone 键盘消失">Iphone 键盘消失</a><span>(1)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/7046790" title="android资料共享">android资料共享</a><span>(1)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6931283" title="Iphone开发入门之基本交互">Iphone开发入门之基本交互</a><span>(0)</span>
+        </li>
+        <li>
+            <a href="http://blog.csdn.net/xia2012sj/article/details/6931118" title="Iphone之HelloWorld">Iphone之HelloWorld</a><span>(0)</span>
+        </li>
+    </ul>
+</div>
+<div id="homepageArticles" class="panel">
+    <ul class="panel_head"><span>推荐文章</span></ul>
+    <ul class="panel_body" id="ad_commend">
+    <iframe id="ad_frm_2" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 182px; height: 218px; " src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ad.htm"></iframe></ul>
+</div>
+<script type="text/javascript">
+    new Ad(12, 'ad_commend');
+</script><div id="newcomments" class="panel">
+<ul class="panel_head"><span>最新评论</span></ul>
+<ul class="panel_body itemlist">
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7046790#comments">android资料共享</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/lishunju" class="user_name">lishunju</a>:
+非常感谢，顶一个。
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7053830#comments">android TextView 自动换行</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/gemmem" class="user_name">余龙飞</a>:
+android:singleLine="true"设置单行输入，一旦设置为true，则文字不会自动换...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/6952878#comments">Iphone之UITableView</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/cpcpc" class="user_name">cpcpc</a>:
+我刚接触Iphone，请问HC_SystemTableViewFrame是什么？lz能不能把项目放出...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7333848#comments">android 复杂的ontouch事件处理</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/xia2012sj" class="user_name">浅雨夏梦</a>:
+放弃了这种做法，因为使用ViewFlipper中嵌套ScrollView就满足了需求。在Galler...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7333848#comments">android 复杂的ontouch事件处理</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/yeyutianya" class="user_name">yeyutianya</a>:
+请问有结果了吗？Gallery中嵌套ScrollView
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/6952878#comments">Iphone之UITableView</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/zapshl" class="user_name">zapshl</a>:
+真不错。 多谢了。
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/6668575#comments">StageFright框架流程解读</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/liuuil1988" class="user_name">liuuil1988</a>:
+开了电脑
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7035324#comments">那些感触</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/xia2012sj" class="user_name">浅雨夏梦</a>:
+@cyc_yyl3111212:学习不敢哦。相互交流吧。
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7035324#comments">那些感触</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/xia2012sj" class="user_name">浅雨夏梦</a>:
+@cyc_yyl3111212:404956114
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/xia2012sj/article/details/7035324#comments">那些感触</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/xia2012sj" class="user_name">浅雨夏梦</a>:
+QQ:404956114呵呵...彼此交流啦。相互学习咯
+    </p>
+    </li>
+</ul>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+</div>
+
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/newblog.min.js"></script>
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/publib_footer.js"></script><link rel="stylesheet" type="text/css" href="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/pub_footer_2012.css"><div class="pub_footerall"><dl><dt></dt> <dd><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a>|<a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a>|<a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a>|<a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a>|<a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a>|<a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a>|<a href="mailto:webmaster@csdn.net">问题报告</a></dd><dd>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd><dd>北京创新乐知信息技术有限公司 版权所有</dd><dd>世纪乐知(北京)网络技术有限公司 提供技术支持</dd><dd>江苏乐知网络技术有限公司 提供商务支持</dd><dd><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ico_email.gif" alt="" title=""> 联系邮箱：webmaster(at)csdn.net</dd><dd>Copyright © 1999-2012, CSDN.NET, All Rights Reserved&nbsp;<a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div><script id="noticeScript" type="text/javascript" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/note.js"></script><script type="text/javascript" charset="utf-8" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/tracking.js"></script>
+
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/login.js"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/pv.aspx" border="0" width="0" height="0">
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+
+
+<script type="text/javascript" src="./FFmpeg框架解读 - - 博客频道 - CSDN.NET_files/ad-blog.js"></script>
+</div>
+
+</body></html>

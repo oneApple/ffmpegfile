@@ -1,0 +1,62 @@
+    if(ist->st->codec->codec_type == AVMEDIA_TYPE_VIDEO)
+             doinfo->key_frame_count += find_start_code( &avpkt_tmp ); 	
+
+张能欢 09:26:44	
+    static int find_start_code(AVPacket *pkt)
+    {
+    uint8_t pict_type_tmp;
+    const uint8_t *buf_tmp = pkt->data;
+    int buf_size = pkt->size;
+    const uint8_t *buf_ptr_tmp = buf_tmp;  /f_ptr是缓冲区的指针，很重要
+    const uint8_t *buf_end_tmp = buf_tmp + buf_size;
+    uint32_t start_code = -1;
+    for(;;)
+    {
+    buf_ptr_tmp = ff_find_start_code_tmp(buf_ptr_tmp,buf_end_tmp, &start_code);
+    if(start_code == 0x00000100)
+    {
+    //查找帧类型的标记，如果为I帧，返回1，否则返回0
+    buf_ptr_tmp += 1;
+    pict_type_tmp = *buf_ptr_tmp;
+    pict_type_tmp &= 0x38;
+    pict_type_tmp = pict_type_tmp >>3;
+    break;
+    }
+    }
+    if(pict_type_tmp == 1)
+        return 1;
+    else
+    return 0;
+    } 	
+
+张能欢 09:26:56	
+    static uint8_t *ff_find_start_code_tmp(uint8_t * p,uint8_t *end, uint32_t *state)
+    {
+        int i;
+
+        assert(p<=end);
+        if(p>=end)
+            return end;
+
+        for(i=0; i<3; i++){
+            uint32_t tmp= *state << 8;
+            *state= tmp + *(p++);
+            if(tmp == 0x100 || p==end)
+                return p;
+        }
+
+        while(p<end){
+            if     (p[-1] > 1      ) p+= 3;
+            else if(p[-2]          ) p+= 2;
+            else if(p[-3]|(p[-1]-1)) p++;
+            else{
+                p++;
+                break;
+            }
+        }
+
+        p= FFMIN(p, end)-4;
+        *state= AV_RB32(p);
+
+        return p+4;
+    } 	

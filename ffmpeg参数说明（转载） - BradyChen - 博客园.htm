@@ -1,0 +1,338 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0066)http://www.cnblogs.com/chen1987lei/archive/2010/12/03/1895242.html -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><HTML 
+xmlns="http://www.w3.org/1999/xhtml"><HEAD><META content="IE=9.0000" 
+http-equiv="X-UA-Compatible">
+
+<META content="text/html; charset=utf-8" http-equiv="Content-Type">
+<TITLE>ffmpeg参数说明（转载） - BradyChen - 博客园</TITLE><LINK rel="stylesheet" type="text/css" 
+href="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/common.css"><LINK id="MainCss" 
+rel="stylesheet" type="text/css" href="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/style.css">
+<LINK rel="stylesheet" type="text/css" href="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/common2.css">
+<LINK rel="stylesheet" type="text/css" href="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/shStyle.css">
+<LINK title="RSS" rel="alternate" type="application/rss+xml" href="http://www.cnblogs.com/chen1987lei/rss">
+<LINK title="RSD" rel="EditURI" type="application/rsd+xml" href="http://www.cnblogs.com/chen1987lei/rsd.xml">
+<LINK rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.cnblogs.com/chen1987lei/wlwmanifest.xml">
+<SCRIPT type="text/javascript" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/jquery.js"></SCRIPT>
+
+<SCRIPT type="text/javascript">
+var currentBlogApp = 'chen1987lei';
+</SCRIPT>
+
+<SCRIPT type="text/javascript" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/common.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/json2.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/syntaxHighlighter.js"></SCRIPT>
+
+<META name="GENERATOR" content="MSHTML 9.00.8112.16464"></HEAD>
+<BODY><A name="top"></A>
+<TABLE class="Framework" cellSpacing="0" cellPadding="0" width="100%">
+  <TBODY>
+  <TR>
+    <TD colSpan="3">
+      <DIV id="top">
+      <TABLE cellSpacing="0" cellPadding="10">
+        <TBODY>
+        <TR>
+          <TD noWrap="">
+            <H1><A id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/chen1987lei/">BradyChen</A></H1></TD></TR>
+        </TBODY></TABLE></DIV>
+      <DIV id="sub">
+      <DIV id="sub-right">
+      <DIV class="BlogStats">posts - 117, comments - 85, trackbacks - 0, 
+      articles - 1</DIV></DIV>	&nbsp;<A id="Header1_MyLinks1_HomeLink" href="http://www.cnblogs.com/">博客园</A>&nbsp;::
+      <A id="Header1_MyLinks1_MyHomeLink" href="http://www.cnblogs.com/chen1987lei/">首页</A>&nbsp;::
+      <A id="Header1_MyLinks1_NewPostLink" href="http://www.cnblogs.com/chen1987lei/admin/EditPosts.aspx?opt=1" 
+      rel="nofollow">新随笔</A>&nbsp;::<A accessKey="9" id="Header1_MyLinks1_ContactLink" 
+      href="http://space.cnblogs.com/msg/send/BradyChen" 
+      rel="nofollow">联系</A>&nbsp;::<A id="Header1_MyLinks1_Syndication" href="http://www.cnblogs.com/chen1987lei/rss">订阅</A>
+      <A id="Header1_MyLinks1_XMLLink" class="XMLLink" href="http://www.cnblogs.com/chen1987lei/rss"><IMG 
+      alt="订阅" 
+      src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/xml.gif"></A>&nbsp;::
+      <A id="Header1_MyLinks1_Admin" href="http://www.cnblogs.com/chen1987lei/admin/EditPosts.aspx" 
+      rel="nofollow">管理</A></DIV></TD></TR>
+  <TR>
+    <TD class="LeftCell">
+      <DIV id="leftmenu">
+      <DIV style="display: none;" id="blog-calendar-block">
+      <DIV id="Cal"><IMG hspace="5" vspace="2" align="left" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/icon-group.jpg">
+      <H3>日历</H3>
+      <DIV id="blog-calendar"></DIV></DIV></DIV>
+      <DIV id="cell"><IMG hspace="5" vspace="2" align="left" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/icon-group.jpg">
+      <H3>公告</H3>
+      <DIV id="news">
+      <DIV id="blog-news"></DIV></DIV></DIV>
+      <DIV id="blog-sidecolumn"></DIV></DIV></TD>
+    <TD class="MainCell">
+      <DIV id="main">
+      <DIV class="post">
+      <DIV class="posthead">
+      <H2><A id="cb_post_title_url" class="singleposttitle" href="http://www.cnblogs.com/chen1987lei/archive/2010/12/03/1895242.html">ffmpeg参数说明（转载）</A></H2>Posted 
+      on <SPAN id="post-date">2010-12-03 10:48</SPAN> <A href="http://www.cnblogs.com/chen1987lei/">BradyChen</A> 
+      阅读(12420) 评论(<SPAN id="post-comment-count">0</SPAN>)  <A href="http://www.cnblogs.com/chen1987lei/admin/EditPosts.aspx?postid=1895242" 
+      rel="nofollow">编辑</A> <A onclick="AddToWz(1895242);return false;" href="http://www.cnblogs.com/chen1987lei/archive/2010/12/03/1895242.html#">收藏</A><IMG 
+      alt="" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/1895242.jpg" 
+      width="1" height="1"></DIV>
+      <DIV class="postbody">
+      <DIV id="cnblogs_post_body">
+      <P>ffmpeg.exe -i F:\闪客之家\闪客之歌.mp3 -ab 56 -ar 22050 -b 500 -r 15 -s 320x240 
+      f:\11.flv <BR>ffmpeg -i F:\01.wmv -ab 56 -ar 22050 -b 500 -r 15 -s 320x240 
+      f:\test.flv <BR>使用-ss参数 作用（time_off set the start time 
+      offset），可以从指定时间点开始转换任务。如: <BR>转换文件格式的同时抓缩微图： <BR>ffmpeg -i "test.avi" -y 
+      -f image2 -ss 8 -t 0.001 -s 350x240 'test.jpg' <BR>对已有flv抓图： <BR>ffmpeg -i 
+      "test.flv" -y -f image2 -ss 8 -t 0.001 -s 350x240 'test.jpg' 
+      <BR>-ss后跟的时间单位为秒 <BR>Ffmpeg转换命令 <BR>ffmpeg -y -i test.mpeg -bitexact 
+      -vcodec h263 -b 128 -r 15 -s 176x144 -acodec aac -ac 2 -ar 22500 <BR>-ab 
+      24 -f 3gp test.3gp <BR>或者 <BR>ffmpeg -y -i test.mpeg -ac 1 -acodec amr_nb 
+      -ar 8000 -s 176x144 -b 128 -r 15 test.3gp </P>
+      <P><BR>ffmpeg参数设定解说 <BR>-bitexact 使用标准比特率 <BR>-vcodec xvid 使用xvid压缩 <BR>-s 
+      320x240 指定分辨率 <BR>-r 29.97 桢速率（可以改，确认非标准桢率会导致音画不同步，所以只能设定为15或者29.97） 
+      <BR>画面部分，选其一 <BR>-b &lt;比特率&gt; 
+      指定压缩比特率，似乎ffmpeg是自动VBR的，指定了就大概是平均比特率，比如768，1500这样的 <BR>就是原来默认项目中有的 
+      <BR>-qscale &lt;数值&gt; 以&lt;数值&gt;质量为基础的VBR，取值0.01-255，约小质量越好 <BR>-qmin 
+      &lt;数值&gt; 设定最小质量，与-qmax（设定最大质量）共用，比如-qmin 10 -qmax 31 <BR>-sameq 
+      使用和源同样的质量 <BR>声音部分 <BR>-acodec aac 设定声音编码 <BR>-ac &lt;数值&gt; 
+      设定声道数，1就是单声道，2就是立体声，转换单声道的TVrip可以用1（节省一半容量），高品质 <BR>的DVDrip就可以用2 <BR>-ar 
+      &lt;采样率&gt; 设定声音采样率，PSP只认24000 <BR>-ab &lt;比特率&gt; 
+      设定声音比特率，前面-ac设为立体声时要以一半比特率来设置，比如192kbps的就设成96，转换 
+      <BR>君默认比特率都较小，要听到较高品质声音的话建议设到160kbps（80）以上 <BR>-vol &lt;百分比&gt; 
+      设定音量，某些DVDrip的AC3轨音量极小，转换时可以用这个提高音量，比如200就是原来的2倍 
+      <BR>这样，要得到一个高画质音质低容量的MP4的话，首先画面最好不要用固定比特率，而用VBR参数让程序自己去 
+      <BR>判断，而音质参数可以在原来的基础上提升一点，听起来要舒服很多，也不会太大（看情况调整 </P>
+      <P><BR>例 子：ffmpeg -y -i "1.avi" -title "Test" -vcodec xvid -s 368x208 -r 
+      29.97 -b 1500 -acodec aac -ac 2 -ar 24000 -ab 128 -vol 200 </P>
+      <P>-f psp -muxvb 768 "1.***" </P>
+      <P>解释：以上命令可以在Dos命令行中输入，也可以创建到批处理文件中运行。不过，前提是：要在ffmpeg所在的目录中执行（转换君所在目录下面的</P>
+      <P>cores子目录）。 <BR>参数： <BR>-y（覆盖输出文件，即如果1.***文件已经存在的话，不经提示就覆盖掉了） <BR>-i 
+      "1.avi"（输入文件是和ffmpeg在同一目录下的1.avi文件，可以自己加路径，改名字） <BR>-title 
+      "Test"（在PSP中显示的影片的标题） <BR>-vcodec xvid（使用XVID编码压缩视频，不能改的） <BR>-s 
+      368x208（输出的分辨率为368x208，注意片源一定要是16:9的不然会变形） <BR>-r 29.97（帧数，一般就用这个吧） <BR>-b 
+      1500（视频数据流量，用-b xxxx的指令则使用固定码率，数字随便改，1500以上没效果；还可以用动态码率如：-qscale 4和-qscale 
+      6，4的质</P>
+      <P>量比6高） <BR>-acodec aac（音频编码用AAC） <BR>-ac 2（声道数1或2） <BR>-ar 
+      24000（声音的采样频率，好像PSP只能支持24000Hz） <BR>-ab 128（音频数据流量，一般选择32、64、96、128） 
+      <BR>-vol 200（200%的音量，自己改） <BR>-f psp（输出psp专用格式） <BR>-muxvb 
+      768（好像是给PSP机器识别的码率，一般选择384、512和768，我改成1500，PSP就说文件损坏了） 
+      <BR>"1.***"（输出文件名，也可以加路径改文件名） </P>
+      <P>机器强劲的话，可以多开几个批处理文件，让它们并行处理。 <BR>E:\ffmpeg.exe -i I:\1.wmv -b 360 -r 25 
+      -s 320x240 -hq -deinterlace -ab 56 -ar 22050 -ac 1 D:\2.flv 
+      <BR>===========================================<BR>ffmpeg.exe -i 
+      F:\闪客之家\闪客之歌.mp3 -ab 56 -ar 22050 -b 500 -r 15 -s 320x240 f:\11.flv ffmpeg 
+      -i F:\01.wmv -ab 56 -ar 22050 -b </P>
+      <P>500 -r 15 -s 320x240 f:\test.flv 使用-ss参数 作用（time_off set the start time 
+      offset），可以从指定时间点开始转换任务。如:<BR>转换文件格式的同时抓缩微图：<BR>ffmpeg -i "test.avi" -y -f 
+      image2 -ss 8 -t 0.001 -s 350x240 'test.jpg'<BR>对已有flv抓图：<BR>ffmpeg -i 
+      "test.flv" -y -f image2 -ss 8 -t 0.001 -s 350x240 
+      'test.jpg'<BR>-ss后跟的时间单位为秒 Ffmpeg转换命令<BR>ffmpeg -y -i test.mpeg -bitexact 
+      -vcodec h263 -b 128 -r 15 -s 176x144 -acodec aac -ac 2 -ar 22500 -ab 24 -f 
+      3gp test.3gp<BR>或者<BR>ffmpeg -y -i test.mpeg -ac 1 -acodec amr_nb -ar 8000 
+      -s 176x144 -b 128 -r 15 test.3gp ffmpeg参数设定解说 <BR>-bitexact 使用标准比特率 
+      <BR>-vcodec xvid 使用xvid压缩 <BR>-s 320x240 指定分辨率 <BR>-r 29.97 
+      桢速率（可以改，确认非标准桢率会导致音画不同步，所以只能设定为15或者29.97） </P>
+      <P><BR>画面部分，选其一 <BR>-b &lt;比特率&gt; 
+      指定压缩比特率，似乎ffmpeg是自动VBR的，指定了就大概是平均比特率，比如768，1500这样的就是原来默认项目中有的 <BR>-qscale 
+      &lt;数值&gt; 以&lt;数值&gt;质量为基础的VBR，取值0.01-255，约小质量越好 <BR>-qmin &lt;数值&gt; 
+      设定最小质量，与-qmax（设定最大质量）共用，比如-qmin 10 -qmax 31 <BR>-sameq 使用和源同样的质量 声音部分 
+      <BR>-acodec aac 设定声音编码 <BR>-ac &lt;数值&gt; 
+      设定声道数，1就是单声道，2就是立体声，转换单声道的TVrip可以用1（节省一半容量），高品质的DVDrip就可以用2 <BR>-ar 
+      &lt;采样率&gt; 设定声音采样率，PSP只认24000 <BR>-ab &lt;比特率&gt; 
+      设定声音比特率，前面-ac设为立体声时要以一半比特率来设置，比如192kbps的就设成96，转换君默认比特率都较小，要听到较高品</P>
+      <P>质声音的话建议设到160kbps（80）以上 <BR>-vol &lt;百分比&gt; 
+      设定音量，某些DVDrip的AC3轨音量极小，转换时可以用这个提高音量，比如200就是原来的2倍 这样，要得到一个高画质音质低容</P>
+      <P>量的MP4的话，首先画面最好不要用固定比特率，而用VBR参数让程序自己去判断，而音质参数可以在原来的基础上提升一 
+      点，听起来要舒服很多，</P>
+      <P>也不会太大（看情况调整 例子：ffmpeg -y -i "1.avi" -title "Test" -vcodec xvid -s 
+      368x208 -r 29.97 -b 1500 -acodec aac -ac 2 -ar </P>
+      <P>24000 -ab 128 -vol 200 -f psp -muxvb 768 "1.***"</P>
+      <P>解释：以上命令可以在Dos命令行中输入，也可以创建到批处理文件中运行。不过，前提是：要在ffmpeg所在的目录中执行（转换君所在目录下面的</P>
+      <P>cores子目录）。<BR>参数：<BR>-y（覆盖输出文件，即如果1.***文件已经存在的话，不经提示就覆盖掉了）<BR>-i 
+      "1.avi"（输入文件是和ffmpeg在同一目录下的1.avi文件，可以自己加路径，改名字）<BR>-title 
+      "Test"（在PSP中显示的影片的标题）<BR>-vcodec xvid（使用XVID编码压缩视频，不能改的）<BR>-s 
+      368x208（输出的分辨率为368x208，注意片源一定要是16:9的不然会变形）<BR>-r 29.97（帧数，一般就用这个吧）<BR>-b 
+      1500（视频数据流量，用-b xxxx的指令则使用固定码率，数字随便改，1500以上没效果；还可以用动态码率如：-qscale 4和-qscale 
+      6，4的质</P>
+      <P>量比6高）<BR>-acodec aac（音频编码用AAC）<BR>-ac 2（声道数1或2）<BR>-ar 
+      24000（声音的采样频率，好像PSP只能支持24000Hz）<BR>-ab 
+      128（音频数据流量，一般选择32、64、96、128）<BR>-vol 200（200%的音量，自己改）<BR>-f 
+      psp（输出psp专用格式）<BR>-muxvb 
+      768（好像是给PSP机器识别的码率，一般选择384、512和768，我改成1500，PSP就说文件损坏了）<BR>"1.***"（输出文件名，也可以加路径改文件名）</P>
+      <P>P.S. 版主机器强劲的话，可以多开几个批处理文件，让它们并行处理。 E:\ffmpeg.exe -i I:\1.wmv -b 360 -r 
+      25 -s 320x240 -hq -</P>
+      <P>deinterlace -ab 56 -ar 22050 -ac 1 D:\2.flv</P>
+      <P>&nbsp;</P>
+      <P>Ffmpeg使用语法</P>
+      <P>ffmpeg [[options][`-i' input_file]]... {[options] output_file}...</P>
+      <P>如果没有输入文件，那么视音频捕捉就会起作用。</P>
+      <P>作为通用的规则，选项一般用于下一个特定的文件。如果你给 -b 64选项，改选会设置下一个视频速率。对于原始输入文件，格式选项可能是需要</P>
+      <P>的。</P>
+      <P>缺省情况下，ffmpeg试图尽可能的无损转换，采用与输入同样的音频视频参数来输出。</P>
+      <P>3．选项</P>
+      <P>a) 通用选项</P>
+      <P>-L license</P>
+      <P>-h 帮助</P>
+      <P>-fromats 显示可用的格式，编解码的，协议的。。。</P>
+      <P>-f fmt 强迫采用格式fmt</P>
+      <P>-I filename 输入文件</P>
+      <P>-y 覆盖输出文件</P>
+      <P>-t duration 设置纪录时间 hh:mm:ss[.xxx]格式的记录时间也支持</P>
+      <P>-ss position 搜索到指定的时间 [-]hh:mm:ss[.xxx]的格式也支持</P>
+      <P>-title string 设置标题</P>
+      <P>-author string 设置作者</P>
+      <P>-copyright string 设置版权</P>
+      <P>-comment string 设置评论</P>
+      <P>-target type 设置目标文件类型(vcd,svcd,dvd) 所有的格式选项（比特率，编解码以及缓冲区大小）自动设置 
+      ，只需要输入如下的就可以了：<BR>ffmpeg -i myfile.avi -target vcd /tmp/vcd.mpg</P>
+      <P>-hq 激活高质量设置</P>
+      <P>-itsoffset offset 
+      设置以秒为基准的时间偏移，该选项影响所有后面的输入文件。该偏移被加到输入文件的时戳，定义一个正偏移意味着相应的</P>
+      <P>流被延迟了 offset秒。 [-]hh:mm:ss[.xxx]的格式也支持</P>
+      <P>b) 视频选项</P>
+      <P>-b bitrate 设置比特率，缺省200kb/s</P>
+      <P>-r fps 设置帧频 缺省25</P>
+      <P>-s size 设置帧大小 格式为WXH 缺省160X128.下面的简写也可以直接使用：<BR>Sqcif 128X96 qcif 
+      176X144 cif 252X288 4cif 704X576</P>
+      <P>-aspect aspect 设置横纵比 4:3 16:9 或 1.3333 1.7777</P>
+      <P>-croptop size 设置顶部切除带大小 像素单位</P>
+      <P>-cropbottom size -cropleft size -cropright size</P>
+      <P>-padtop size 设置顶部补齐的大小 像素单位</P>
+      <P>-padbottom size -padleft size -padright size -padcolor color 
+      设置补齐条颜色(hex,6个16进制的数，红:绿:兰排列，比如 000000代表黑色)</P>
+      <P>-vn 不做视频记录</P>
+      <P>-bt tolerance 设置视频码率容忍度kbit/s</P>
+      <P>-maxrate bitrate设置最大视频码率容忍度</P>
+      <P>-minrate bitreate 设置最小视频码率容忍度</P>
+      <P>-bufsize size 设置码率控制缓冲区大小</P>
+      <P>-vcodec codec 强制使用codec编解码方式。 如果用copy表示原始编解码数据必须被拷贝。</P>
+      <P>-sameq 使用同样视频质量作为源（VBR）</P>
+      <P>-pass n 选择处理遍数（1或者2）。两遍编码非常有用。第一遍生成统计信息，第二遍生成精确的请求的码率</P>
+      <P>-passlogfile file 选择两遍的纪录文件名为file</P>
+      <P><BR>c)高级视频选项</P>
+      <P>-g gop_size 设置图像组大小</P>
+      <P>-intra 仅适用帧内编码</P>
+      <P>-qscale q 使用固定的视频量化标度(VBR)</P>
+      <P>-qmin q 最小视频量化标度(VBR)</P>
+      <P>-qmax q 最大视频量化标度(VBR)</P>
+      <P>-qdiff q 量化标度间最大偏差 (VBR)</P>
+      <P>-qblur blur 视频量化标度柔化(VBR)</P>
+      <P>-qcomp compression 视频量化标度压缩(VBR)</P>
+      <P>-rc_init_cplx complexity 一遍编码的初始复杂度</P>
+      <P>-b_qfactor factor 在p和b帧间的qp因子</P>
+      <P>-i_qfactor factor 在p和i帧间的qp因子</P>
+      <P>-b_qoffset offset 在p和b帧间的qp偏差</P>
+      <P>-i_qoffset offset 在p和i帧间的qp偏差</P>
+      <P>-rc_eq equation 设置码率控制方程 默认tex^qComp</P>
+      <P>-rc_override override 特定间隔下的速率控制重载</P>
+      <P>-me method 设置运动估计的方法 可用方法有 zero phods log x1 epzs(缺省) full</P>
+      <P>-dct_algo algo 设置dct的算法 可用的有 0 FF_DCT_AUTO 缺省的DCT 1 FF_DCT_FASTINT 2 
+      FF_DCT_INT 3 FF_DCT_MMX 4 FF_DCT_MLIB 5 </P>
+      <P>FF_DCT_ALTIVEC</P>
+      <P>-idct_algo algo 设置idct算法。可用的有 0 FF_IDCT_AUTO 缺省的IDCT 1 FF_IDCT_INT 2 
+      FF_IDCT_SIMPLE 3 FF_IDCT_SIMPLEMMX 4 </P>
+      <P>FF_IDCT_LIBMPEG2MMX 5 FF_IDCT_PS2 6 FF_IDCT_MLIB 7 FF_IDCT_ARM 8 
+      FF_IDCT_ALTIVEC 9 FF_IDCT_SH4 10 FF_IDCT_SIMPLEARM</P>
+      <P>-er n 设置错误残留为n 1 FF_ER_CAREFULL 缺省 2 FF_ER_COMPLIANT 3 FF_ER_AGGRESSIVE 
+      4 FF_ER_VERY_AGGRESSIVE</P>
+      <P>-ec bit_mask 设置错误掩蔽为bit_mask,该值为如下值的位掩码 1 FF_EC_GUESS_MVS 
+      (default=enabled) 2 FF_EC_DEBLOCK (default=enabled) </P>
+      <P>-bf frames 使用frames B 帧，支持mpeg1,mpeg2,mpeg4</P>
+      <P>-mbd mode 宏块决策 0 FF_MB_DECISION_SIMPLE 使用mb_cmp 1 FF_MB_DECISION_BITS 2 
+      FF_MB_DECISION_RD</P>
+      <P>-4mv 使用4个运动矢量 仅用于mpeg4</P>
+      <P>-part 使用数据划分 仅用于mpeg4</P>
+      <P>-bug param 绕过没有被自动监测到编码器的问题</P>
+      <P>-strict strictness 跟标准的严格性</P>
+      <P>-aic 使能高级帧内编码 h263+</P>
+      <P>-umv 使能无限运动矢量 h263+</P>
+      <P>-deinterlace 不采用交织方法</P>
+      <P>-interlace 强迫交织法编码 
+      仅对mpeg2和mpeg4有效。当你的输入是交织的并且你想要保持交织以最小图像损失的时候采用该选项。可选的方法是</P>
+      <P>不交织，但是损失更大</P>
+      <P>-psnr 计算压缩帧的psnr</P>
+      <P>-vstats 输出视频编码统计到vstats_hhmmss.log</P>
+      <P>-vhook module 插入视频处理模块 module 包括了模块名和参数，用空格分开</P>
+      <P>D)音频选项</P>
+      <P>-ab bitrate 设置音频码率</P>
+      <P>-ar freq 设置音频采样率</P>
+      <P>-ac channels 设置通道 缺省为1</P>
+      <P>-an 不使能音频纪录</P>
+      <P>-acodec codec 使用codec编解码</P>
+      <P>E)音频/视频捕获选项</P>
+      <P>-vd device 设置视频捕获设备。比如/dev/video0</P>
+      <P>-vc channel 设置视频捕获通道 DV1394专用</P>
+      <P>-tvstd standard 设置电视标准 NTSC PAL(SECAM)</P>
+      <P>-dv1394 设置DV1394捕获</P>
+      <P>-av device 设置音频设备 比如/dev/dsp</P>
+      <P><BR>F)高级选项</P>
+      <P>-map file:stream 设置输入流映射</P>
+      <P>-debug 打印特定调试信息</P>
+      <P>-benchmark 为基准测试加入时间</P>
+      <P>-hex 倾倒每一个输入包</P>
+      <P>-bitexact 仅使用位精确算法 用于编解码测试</P>
+      <P>-ps size 设置包大小，以bits为单位</P>
+      <P>-re 以本地帧频读数据，主要用于模拟捕获设备</P>
+      <P>-loop 循环输入流。只工作于图像流，用于ffserver测试 </P>
+      <P>&nbsp;</P></DIV>
+      <DIV id="MySignature"></DIV>
+<SCRIPT type="text/javascript">
+var isLogined = false;
+var cb_blogId = 56616;
+var cb_entryId = 1895242;
+var cb_blogApp = currentBlogApp;
+var cb_blogUserGuid = "3a294f8a-a146-de11-9510-001cf0cd104b";
+var cb_entryCreatedDate = '2010/12/3 10:48:00';
+var enableGoogleAd = true;
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+</SCRIPT>
+      
+      <DIV class="clear"></DIV>
+      <DIV id="blog_post_info_block">
+      <DIV id="blog_post_info"></DIV>
+      <DIV class="clear"></DIV>
+      <DIV id="post_next_prev"></DIV></DIV>
+<SCRIPT type="text/javascript">
+    //SyntaxHighlighter.config.strings.expandSource = '<span><img src="http://static.cnblogs.com/images/expand-code.gif" alt="" class="expand-code-icon"/>View Code</span>';
+    $(function () {             
+        fixPostBodyFormat();
+        loadAdUnderPost();
+        loadBlogSignature();
+        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);        
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);        
+    });
+</SCRIPT>
+      </DIV></DIV>
+      <DIV id="blog-comments-placeholder"></DIV>
+<SCRIPT type="text/javascript">var commentManager = new blogCommentManager();commentManager.loadComments();</SCRIPT>
+      
+      <DIV id="comment_form" class="commentform">
+      <DIV id="divCommentShow"></DIV>
+      <DIV id="comment_nav"><SPAN id="span_refresh_tips"></SPAN><A id="lnk_RefreshComments" 
+      onclick="return RefreshCommentList();" 
+      href="javascript:void(0);">刷新评论</A><A onclick="return RefreshPage();" 
+      href="http://www.cnblogs.com/chen1987lei/archive/2010/12/03/1895242.html#">刷新页面</A><A 
+      href="http://www.cnblogs.com/chen1987lei/archive/2010/12/03/1895242.html#top">返回顶部</A></DIV>
+      <DIV id="comment_form_container"></DIV>
+<SCRIPT type="text/javascript">if (typeof commentManager === 'undefined') {
+        commentManager = new blogCommentManager();
+    }
+    commentManager.loadCommentForm();   
+</SCRIPT>
+
+      <DIV id="ad_text_under_commentbox" class="ad_text_commentbox"></DIV>
+      <DIV id="site_nav_under"><A title="程序员的网上家园" href="http://www.cnblogs.com/" 
+      target="_blank">博客园首页</A><A title="程序员问答社区" href="http://q.cnblogs.com/" 
+      target="_blank">博问</A><A title="IT新闻" href="http://news.cnblogs.com/" 
+      target="_blank">新闻</A><A href="http://home.cnblogs.com/ing/" target="_blank">闪存</A><A 
+      href="http://job.cnblogs.com/" target="_blank">程序员招聘</A><A href="http://kb.cnblogs.com/" 
+      target="_blank">知识库</A></DIV>
+      <DIV id="ad_under_post_holder"></DIV>
+      <DIV id="HistoryToday" class="c_ad_block"></DIV></DIV></DIV></TD></TR>
+  <TR>
+    <TD class="FooterCell" colSpan="2">
+      <P id="footer">	Powered by: 	<BR><A style="font-family: Verdana; font-size: 12px;" 
+      id="Footer1_Hyperlink3" href="http://www.cnblogs.com/" 
+      name="Hyperlink1">博客园</A><BR>Copyright © BradyChen</P></TD></TR></TBODY></TABLE>
+<SCRIPT type="text/javascript" src="ffmpeg参数说明（转载）%20-%20BradyChen%20-%20博客园_files/google-analytics.js"></SCRIPT>
+</BODY></HTML>
