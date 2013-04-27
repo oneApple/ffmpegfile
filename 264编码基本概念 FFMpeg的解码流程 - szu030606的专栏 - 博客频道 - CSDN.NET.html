@@ -1,0 +1,554 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0054)http://blog.csdn.net/szu030606/article/details/5930022 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>264编码基本概念   FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET</title>
+
+<meta name="description" content="下面转自http://topic.csdn.net/u/20081020/16/7156e0b2-dbfb-4b4f-af59-2be04cf9a420.html 的8楼1、NAL、Slice与frame意思及相互关系 NAL指网络提取层，里面放一些与网络相关的信息Slice是片的意思，264中把图像分成一帧（frame）或两场（field），而帧又可以分成一个或几个片（Slilce）；片由宏块（MB）组成。宏块是编码处理的基本单元。&lt;">
+<script charset="utf-8" async="" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/log.js"></script><script charset="utf-8" async="" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/cc.js"></script><script type="text/javascript" async="" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ga.js"></script><script src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ad.js"></script>
+<link rel="Stylesheet" type="text/css" href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/style.css">
+<link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/szu030606/rss/list">
+<link rel="shortcut icon" href="http://blog.csdn.net/favicon.ico">
+<link type="text/css" rel="stylesheet" href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/default.css">
+<link type="text/css" rel="stylesheet" href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/style(1).css"></head>
+<body>
+<script src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/pub_topnav_2011.js" type="text/javascript"></script><link rel="stylesheet" type="text/css" href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/navtop_2012.css">
+<div class="nav_top_2011">
+<p><span style="color:red;">您还未登录！</span>|<a href="https://passport.csdn.net/account/login" target="_top">登录</a>|<a href="https://passport.csdn.net/account/register" target="_top">注册</a>|<a href="https://passport.csdn.net/help/faq" target="_blank">帮助</a></p><ul>
+<li><a href="http://www.csdn.net/" target="_blank" style="color: red;">首页</a></li>
+<li><a href="http://news.csdn.net/" target="_blank">业界</a></li>
+<li><a href="http://mobile.csdn.net/" target="_blank">移动</a></li>
+<li><a href="http://cloud.csdn.net/" target="_blank">云计算</a></li>
+<li><a href="http://sd.csdn.net/" target="_blank">研发</a></li>
+<li><a href="http://bbs.csdn.net/" target="_blank">论坛</a></li>
+<li><a href="http://blog.csdn.net/" target="_blank">博客</a></li>
+<li><a href="http://download.csdn.net/" target="_blank">下载</a></li>
+<li class="more"><h2 id="topnav_btnmore" onclick="showNavMore(this)"><a href="javascript:void(0);">更多</a></h2>
+<div id="topnav_hidlist">
+<iframe name="nav_frm" src="about:blank" width="92" height="178" scrolling="no" frameborder="no"></iframe>
+</div>
+</li>
+</ul>
+</div>
+
+
+<div id="container">
+<div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h1><a href="http://blog.csdn.net/szu030606">szu030606的专栏</a></h1>
+            <h2>视音频专家(视频标准制定者)</h2>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg"></div>
+    <div class="navigator">
+        <ul>
+            <li id="btnContents"><a href="http://blog.csdn.net/szu030606?viewmode=contents"><span><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+            <li id="btnView"><a href="http://blog.csdn.net/szu030606?viewmode=list"><span><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+            <li id="btnRss"><a href="http://blog.csdn.net/szu030606/rss/list"><span><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>
+</ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "szu030606";
+    var _blogger = username;
+    var blog_address = "http://blog.csdn.net/szu030606";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";
+</script>
+
+<div id="body">
+<div id="main">
+<div class="main">
+<div class="notice"> 
+
+<a href="http://events.csdn.net/DR2013/roadshow/index.html" target="_blank">
+<font color="red">【免费有礼】欧美最新网络营销技巧分享 
+   </font></a>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/l09196891/article/details/8845828" target="_blank"><font color="blue">博客导入工具
+</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://www.csdn.net/article/2013-04-22/2814999" target="_blank"><font color="red">专访阿朱：企业信息化的革命前夜
+
+
+
+
+</font></a>
+
+<br>
+
+
+
+
+
+<a href="http://www.csdn.net/" target="_blank">
+<font color="red">来访问简洁大字的CSDN新首页 
+
+
+ </font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://bbs.csdn.net/topics/390426621" target="_blank">
+<font color="red">免费领取CSDN积分大礼包
+ </font></a>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://blog.csdn.net/blogdevteam/article/details/8853291" target="_blank">
+<font color="blue">CSDN博客第二期最佳移动开发博主评选
+ </font></a>
+
+
+
+
+</div>
+<div id="article_details" class="details">
+    <div class="article_title">
+    <span class="ico ico_type_Original"></span>
+    <h3>
+        <span class="link_title"><a href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET.html">
+        264编码基本概念   FFMpeg的解码流程
+        </a></span>
+    </h3>
+</div>
+
+        
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/szu030606/article/category/738366">h264</a> 
+        </span>
+    <span class="link_postdate">2010-10-09 17:05</span>
+    <span class="link_view" title="阅读次数">2829人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/szu030606/article/details/5930022#comments">评论</a>(0)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:collectArticle(&#39;264编码基本概念   FFMpeg的解码流程&#39;,&#39;5930022&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/szu030606/article/details/5930022#report" onclick="javascript:report(5930022,2);return false;" title="举报">举报</a></span>
+    
+</div>
+<div class="tag2box"><a href="http://blog.csdn.net/tag/details.html?tag=stream" target="_blank">stream</a><a href="http://blog.csdn.net/tag/details.html?tag=video" target="_blank">video</a><a href="http://blog.csdn.net/tag/details.html?tag=codec" target="_blank">codec</a><a href="http://blog.csdn.net/tag/details.html?tag=input" target="_blank">input</a><a href="http://blog.csdn.net/tag/details.html?tag=buffer" target="_blank">buffer</a><a href="http://blog.csdn.net/tag/details.html?tag=file" target="_blank">file</a></div>
+
+
+    
+<div id="article_content" class="article_content">
+<p>下面转自<a href="http://topic.csdn.net/u/20081020/16/7156e0b2-dbfb-4b4f-af59-2be04cf9a420.html">http://topic.csdn.net/u/20081020/16/7156e0b2-dbfb-4b4f-af59-2be04cf9a420.html</a> 的8楼</p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">1、NAL、Slice与frame意思及相互关系 <br><br>NAL指网络提取层，里面放一些与网络相关的信息<br>Slice是片的意思，264中把图像分成一帧（frame）或两场（field），而帧又可以分成一个或几个片（Slilce）；片由宏块（MB）组成。宏块是编码处理的基本单元。<br><br>2、NAL nal_unit_type中的1（非IDR图像的编码条带）、2（编码条带数据分割块A）、3（编码条带数据分割块B）、4（编码条带数据分割块C）、5（IDR图像的编码条带）种类型 <br>与 Slice种的三种编码模式：I_slice、P_slice、B_slice <br>NAL nal_unit_type 里的五种类型，代表接下来数据是表示啥信息的和具体如何分块。<br>I_slice、P_slice、B_slice 表示I类型的片、P类型的片，B类型的片.其中I_slice为帧内预测模式编码；P_slice为单向预测编码或帧内模式；B_slice 中为双向预测或帧内模式。<br><br>3、还有frame的3种类型：I frame、P frame、 B frame之间有什么映射关系么？ <br>I frame、P frame、 B frame关系同 I_slice、P_slice、B_slice，slice和frame区别在问题1中已经讲明白。<br><br>4、最后，NAL nal_unit_type中的6（SEI）、7（SPS）、8（PPS）属于什么帧呢？ <br>NAL nal_unit_type 为序列参数集（SPS）、图像参数集（PPS）、增强信息（SEI）不属于啥帧的概念。表示后面的数据信息为序列参数集（SPS）、图像参数集（PPS）、增强信息（SEI）。</span></span></p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">====================================================================================</span></span></p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;"><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">NAL单元中首先会有一个H.264 NAL type，根据这个可以判断是啥信息。如果是<br>H264NT_SLICE_DPA,H264NT_SLICE_DPB,H264NT_SLICE_DPC, H264NT_SLICE_IDR视频数据相关的，里面还会有Slice head头信息，根据这个头信息，可以判断属于I-Slice（P-Slice或B-Slice），之后对于每个宏块，都会有MB head 信息，根据宏块头信息可以判断块模式。<br><br>H264就是这样以分层的方式组织信息的。不知道你理解没有。</span></span></span></span></p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">====================================================================================</span></span></p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">x264_encoder_encode每次会以参数送入一帧待编码的帧pic_in，函数首先会从空闲队列中取出一帧用于承载该新帧，而它的i_frame被设定为播放顺序计数，如：fenc-&gt;i_frame = h-&gt;frames.i_input++。 <br></span></span></p>
+<p><span class="Apple-style-span"></span></p>
+<p><span class="Apple-style-span"><span class="Apple-style-span" style="font-size: 14px; line-height: 23px; text-align: left;">FFMpeg的解码流程</span></span></p>
+<p>1. 从基础谈起<br>先给出几个概念，以在后面的分析中方便理解<br>Container:在音视频中的容器，一般指的是一种特定的文件格式，里面指明了所包含的<br>&nbsp;&nbsp;&nbsp; 音视频，字幕等相关信息<br>Stream:这个词有些微妙，很多地方都用到，比如TCP，SVR4系统等，其实在音视频，你<br>&nbsp;&nbsp;&nbsp; 可以理解为单纯的音频数据或者视频数据等<br>Frames:这个概念不是很好明确的表示，指的是Stream中的一个数据单元，要真正对这<br>&nbsp;&nbsp;&nbsp; 个概念有所理解，可能需要看一些音视频编码解码的理论知识<br>Packet:是Stream的raw数据<br>Codec:Coded + Decoded<br>其实这些概念在在FFmpeg中都有很好的体现，我们在后续分析中会慢慢看到</p>
+<p>2.解码的基本流程<br>我很懒，于是还是选择了从&lt;An ffmpeg and SDL Tutorial&gt;中的流程概述:</p>
+<p>10 OPEN video_stream FROM video.avi<br>20 READ packet FROM video_stream INTO frame<br>30 IF frame NOT COMPLETE GOTO 20<br>40 DO SOMETHING WITH frame<br>50 GOTO 20</p>
+<p>这就是解码的全过程，一眼看去，是不是感觉不过如此:),不过，事情有深有浅，从浅<br>到深，然后从深回到浅可能才是一个有意思的过程，我们的故事，就从这里开始，展开<br>来讲。</p>
+<p>3.例子代码<br>在&lt;An ffmpeg and SDL Tutorial 1&gt;中，给出了一个阳春版的解码器，我们来仔细看看<br>阳春后面的故事，为了方便讲述，我先贴出代码：</p>
+<p>#include &lt;ffmpeg/avcodec.h&gt;<br>#include &lt;ffmpeg/avformat.h&gt;</p>
+<p>#include &lt;stdio.h&gt;</p>
+<p>void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {<br>FILE *pFile;<br>char szFilename[32];<br>int y;<br><br>// Open file<br>sprintf(szFilename, "frame%d.ppm", iFrame);<br>pFile=fopen(szFilename, "wb");<br>if(pFile==NULL)<br>&nbsp;&nbsp;&nbsp; return;<br><br>// Write header<br>fprintf(pFile, "P6/n%d %d/n255/n", width, height);<br><br>// Write pixel data<br>for(y=0; y&lt;height; y++)<br>&nbsp;&nbsp;&nbsp; fwrite(pFrame-&gt;data[0]+y*pFrame-&gt;linesize[0], 1, width*3, pFile);<br><br>// Close file<br>fclose(pFile);<br>}</p>
+<p>int main(int argc, char *argv[]) {<br>AVFormatContext *pFormatCtx;<br>int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i, videoStream;<br>AVCodecContext *pCodecCtx;<br>AVCodec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *pCodec;<br>AVFrame&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *pFrame; <br>AVFrame&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *pFrameRGB;<br>AVPacket&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; packet;<br>int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; frameFinished;<br>int&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; numBytes;<br>uint8_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *buffer;<br><br>if(argc &lt; 2) {<br>&nbsp;&nbsp;&nbsp; printf("Please provide a movie file/n");<br>&nbsp;&nbsp;&nbsp; return -1;<br>}<br>// Register all formats and codecs<br>########################################<br>[1]<br>########################################<br>av_register_all();<br><br>// Open video file<br>########################################<br>[2]<br>########################################<br>if(av_open_input_file(&amp;pFormatCtx, argv[1], NULL, 0, NULL)!=0)<br>&nbsp;&nbsp;&nbsp; return -1; // Couldn't open file<br><br>// Retrieve stream information<br>########################################<br>[3]<br>########################################<br>if(av_find_stream_info(pFormatCtx)&lt;0)<br>&nbsp;&nbsp;&nbsp; return -1; // Couldn't find stream information<br><br>// Dump information about file onto standard error<br>dump_format(pFormatCtx, 0, argv[1], 0);<br><br>// Find the first video stream<br>videoStream=-1;<br>for(i=0; i&lt;pFormatCtx-&gt;nb_streams; i++)<br>&nbsp;&nbsp;&nbsp; if(pFormatCtx-&gt;streams[i]-&gt;codec-&gt;codec_type==CODEC_TYPE_VIDEO) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; videoStream=i;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br>&nbsp;&nbsp;&nbsp; }<br>if(videoStream==-1)<br>&nbsp;&nbsp;&nbsp; return -1; // Didn't find a video stream<br><br>// Get a pointer to the codec context for the video stream<br>pCodecCtx=pFormatCtx-&gt;streams[videoStream]-&gt;codec;<br><br>// Find the decoder for the video stream<br>pCodec=avcodec_find_decoder(pCodecCtx-&gt;codec_id);<br>if(pCodec==NULL) {<br>&nbsp;&nbsp;&nbsp; fprintf(stderr, "Unsupported codec!/n");<br>&nbsp;&nbsp;&nbsp; return -1; // Codec not found<br>}<br>// Open codec<br>if(avcodec_open(pCodecCtx, pCodec)&lt;0)<br>&nbsp;&nbsp;&nbsp; return -1; // Could not open codec<br><br>// Allocate video frame<br>pFrame=avcodec_alloc_frame();<br><br>// Allocate an AVFrame structure<br>pFrameRGB=avcodec_alloc_frame();<br>if(pFrameRGB==NULL)<br>&nbsp;&nbsp;&nbsp; return -1;<br>&nbsp;&nbsp;&nbsp; <br>// Determine required buffer size and allocate buffer<br>numBytes=avpicture_get_size(PIX_FMT_RGB24, pCodecCtx-&gt;width,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pCodecCtx-&gt;height);<br>buffer=(uint8_t *)av_malloc(numBytes*sizeof(uint8_t));<br><br>// Assign appropriate parts of buffer to image planes in pFrameRGB<br>// Note that pFrameRGB is an AVFrame, but AVFrame is a superset<br>// of AVPicture<br>avpicture_fill((AVPicture *)pFrameRGB, buffer, PIX_FMT_RGB24,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pCodecCtx-&gt;width, pCodecCtx-&gt;height);<br><br>// Read frames and save first five frames to disk<br>########################################<br>[4]<br>########################################<br>i=0;<br>while(av_read_frame(pFormatCtx, &amp;packet)&gt;=0) {<br>&nbsp;&nbsp;&nbsp; // Is this a packet from the video stream?<br>&nbsp;&nbsp;&nbsp; if(packet.stream_index==videoStream) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Decode video frame<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; avcodec_decode_video(pCodecCtx, pFrame, &amp;frameFinished, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; packet.data, packet.size);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Did we get a video frame?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(frameFinished) {<br>&nbsp;&nbsp;&nbsp; // Convert the image from its native format to RGB<br>&nbsp;&nbsp;&nbsp; img_convert((AVPicture *)pFrameRGB, PIX_FMT_RGB24, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (AVPicture*)pFrame, pCodecCtx-&gt;pix_fmt, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pCodecCtx-&gt;width, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pCodecCtx-&gt;height);<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; // Save the frame to disk<br>&nbsp;&nbsp;&nbsp; if(++i&lt;=5)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SaveFrame(pFrameRGB, pCodecCtx-&gt;width, pCodecCtx-&gt;height, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; // Free the packet that was allocated by av_read_frame<br>&nbsp;&nbsp;&nbsp; av_free_packet(&amp;packet);<br>}<br><br>// Free the RGB image<br>av_free(buffer);<br>av_free(pFrameRGB);<br><br>// Free the YUV frame<br>av_free(pFrame);<br><br>// Close the codec<br>avcodec_close(pCodecCtx);<br><br>// Close the video file<br>av_close_input_file(pFormatCtx);<br><br>return 0;<br>}</p>
+<p>代码注释得很清楚，没什么过多需要讲解的，关于其中的什么YUV420，RGB，PPM等格式<br>，如果不理解，麻烦还是google一下，也可以参考:http://barrypopy.cublog.cn/里面<br>的相关文章</p>
+<p>其实这部分代码，很好了Demo了怎么样去抓屏功能的实现，但我们得去看看魔术师在后<br>台的一些手法，而不只是简单的享受其表演。</p>
+<p>4.背后的故事<br>真正的难度，其实就是上面的[1],[2],[3],[4],其他部分，都是数据结构之间的转换，<br>如果你认真看代码的话，不难理解其他部分。</p>
+<p>[1]:没什么太多好说的，如果不明白，看我转载的关于FFmepg框架的文章</p>
+<p>[2]:先说说里面的AVFormatContext *pFormatCtx结构，字面意思理解AVFormatContext<br>就是关于AVFormat(其实就是我们上面说的Container格式)的所处的Context(场景)，自<br>然是保存Container信息的总控结构了，后面你也可以看到，基本上所有的信息，都可<br>以从它出发而获取到<br>&nbsp;&nbsp;&nbsp; <br>我们来看看av_open_input_file()都做了些什么：<br>[libavformat/utils.c]<br>int av_open_input_file(AVFormatContext **ic_ptr, const char *filename,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVInputFormat *fmt,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int buf_size,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AVFormatParameters *ap)<br>{<br>&nbsp;&nbsp;&nbsp; ......<br>&nbsp;&nbsp;&nbsp; if (!fmt) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* guess format if no file can be opened */<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fmt = av_probe_input_format(pd, 0);<br>&nbsp;&nbsp;&nbsp; }</p>
+<p>&nbsp;&nbsp; ......<br>&nbsp;&nbsp;&nbsp; err = av_open_input_stream(ic_ptr, pb, filename, fmt, ap);<br>&nbsp;&nbsp; ......<br>}</p>
+<p>这样看来，只是做了两件事情：<br>1). 侦测容器文件格式<br>2). 从容器文件获取Stream的信息</p>
+<p>这两件事情，实际上就是调用特定文件的demuxer以分离Stream的过程:</p>
+<p>具体流程如下:</p>
+<p>av_open_input_file<br>&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp; +----&gt;av_probe_input_format从first_iformat中遍历注册的所有demuxer以 <br>&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; 调用相应的probe函数<br>&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp; +----&gt;av_open_input_stream调用指定demuxer的read_header函数以获取相关<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 流的信息ic-&gt;iformat-&gt;read_header</p>
+<p>如果反过来再参考我转贴的关于ffmpeg框架的文章，是否清楚一些了呢:)</p>
+<p>[3]:简单从AVFormatContext获取Stream的信息，没什么好多说的</p>
+<p>[4]:先简单说一些ffmpeg方面的东西，从理论角度说过来，Packet可以包含frame的部<br>分数据，但ffmpeg为了实现上的方便，使得对于视频来说，每个Packet至少包含一<br>frame,对于音频也是相应处理，这是实现方面的考虑，而非协议要求.<br>因此，在上面的代码实际上是这样的：<br>&nbsp;&nbsp;&nbsp; 从文件中读取packet，从Packet中解码相应的frame;<br>&nbsp;&nbsp;&nbsp; 从帧中解码;<br>&nbsp;&nbsp;&nbsp; if(解码帧完成)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do something();</p>
+<p>我们来看看如何获取Packet,又如何从Packet中解码frame的。</p>
+<p>av_read_frame<br>&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp; +----&gt;av_read_frame_internal<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +----&gt;av_parser_parse调用的是指定解码器的s-&gt;parser-&gt;parser_parse函数以从raw packet中重构frame</p>
+<p>avcodec_decode_video<br>&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp; +----&gt;avctx-&gt;codec-&gt;decode调用指定Codec的解码函数<br>&nbsp;&nbsp;&nbsp; <br>因此，从上面的过程可以看到，实际上分为了两部分：</p>
+<p>一部分是解复用(demuxer),然后是解码(decode)</p>
+<p>使用的分别是：<br>av_open_input_file()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ----&gt;解复用</p>
+<p>av_read_frame()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; ----&gt;解码&nbsp;&nbsp;&nbsp; <br>avcodec_decode_video()&nbsp;&nbsp;&nbsp;&nbsp; |</p>
+<p>5.后面该做些什么<br>结合这部分和转贴的ffmepg框架的文章，应该可以基本打通解码的流程了，后面的问题则是针对具体容器格式和具体编码解码器的分析，后面我们继续</p>
+<p><br>参考：<br>[1]. &lt;An ffmpeg and SDL Tutorial&gt; <br>&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.dranger.com/ffmpeg/tutorial01.HTML">http://www.dranger.com/ffmpeg/tutorial01.HTML</a><br>&nbsp;&nbsp;&nbsp;&nbsp; <br>[2]. &lt;FFMpeg框架代码阅读&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://blog.csdn.net/wstarx/archive/2007/04/20/1572393.ASPx">http://blog.csdn.NET/wstarx/archive/2007/04/20/1572393.ASPx</a></p>
+</div>
+
+<div class="share_buttons" id="sharePanel"><span>分享到：</span> <a name="sina" class="share_sina" title="分享到新浪微博"></a><a name="qq" class="share_qq" title="分享到腾讯微博"></a></div>
+<!--192.168.1.237-->
+<div class="article_next_prev">
+    <li class="prev_article"><span>上一篇：</span><a href="http://blog.csdn.net/szu030606/article/details/5929687">H.264句法和语法总结   句法元素的分层结构</a></li>
+    <li class="next_article"><span>下一篇：</span><a href="http://blog.csdn.net/szu030606/article/details/5930060">ffmpeg最新源代码（定期更新）</a></li>
+</div>
+
+
+    
+</div>
+<div id="ad_cen">
+<script type="text/javascript">BAIDU_CLB_SLOT_ID = "117306";</script>
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/o.js"></script><script charset="utf-8" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ecom"></script><div id="baidu_clb_slot_117306"><div style="display:none">-</div> <iframe id="cproIframe1" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/uijs.html" width="728" height="90" align="center,center" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" allowtransparency="true"></iframe></div>
+</div>
+<script type="text/javascript">
+    //new Ad(4, 'ad_cen');
+</script>
+<div id="comment_title" class="panel_head">查看评论<a name="comments"></a></div>
+<div id="comment_list"><br>&nbsp;&nbsp;暂无评论<br><br><div class="clear"></div></div>
+<div id="comment_bar"></div>
+<div id="comment_form"><div class="guest_link">您还没有登录,请<a href="javascript:void(0);" onclick="javascript:csdn.showLogin(function (dat) {js_logined(dat.data.userName);});">[登录]</a>或<a href="http://passport.csdn.net/account/register?from=http%3A%2F%2Fblog.csdn.net%2Fszu030606%2Farticle%2Fdetails%2F5930022">[注册]</a></div></div>
+<div class="announce">* 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+<script type="text/javascript">
+    var fileName = '5930022';
+    var commentscount = 0;
+    var islock = false
+</script>
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/comment.js"></script>
+<div id="ad_bot"><iframe id="ad_frm_0" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 732px; height: 170px;" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ad(1).html"></iframe></div>
+<script type="text/javascript">
+    new Ad(5, 'ad_bot');
+</script>
+<div id="report_dialog"></div>
+
+<div id="d-top" style="display: block;">
+<a id="d-top-a" href="http://blog.csdn.net/szu030606/article/details/5930022#" title="回到顶部">
+<img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/top.png" alt="TOP"></a>
+</div>
+<script type="text/javascript">
+    $(function(){
+        var d_top=$('#d-top');
+        document.onscroll=function(){
+            var scrTop=(document.body.scrollTop||document.documentElement.scrollTop);
+            if(scrTop>500){
+                d_top.show();
+            }else{
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function(){
+            scrollTo(0,0);
+            this.blur();
+            return false;
+        });
+    });
+</script>
+
+<div class="clear"></div>
+</div>
+</div>
+
+<div id="side">
+<div class="side">
+<div id="custom_column_21622421" class="panel">
+<ul class="panel_head"><span>视频提高班</span></ul>
+<ul class="panel_body">
+
+10多年音视频经验大师，视频标准制定者教你视频内容。
+
+</ul>
+</div><div id="custom_column_21622410" class="panel">
+<ul class="panel_head"><span>C 和C plus plus 语言提高班</span></ul>
+<ul class="panel_body">
+
+针对C语言，提供更好的学习和更多的经验。针对C plus plus 常用的内容，进行提高和分析。
+
+</ul>
+</div><div id="custom_column_21622420" class="panel">
+<ul class="panel_head"><span>友情链接</span></ul>
+<ul class="panel_body">
+
+<li><a href="http://blog.csdn.net/feixiaoxing/article/details/7028443/" target="_blank">feixiaoxing</a>
+</li><li><a href="http://blog.csdn.net/hzliyun" target="_blank">李云</a> </li><li><a href="http://blog.csdn.net/yuanmeng001/article/details/8561584" target="_blank">yuanmeng001</a></li>
+</ul>
+</div><div id="panel_Profile" class="panel">
+<ul class="panel_head"><span>个人资料</span></ul>
+<ul class="panel_body profile">
+<div id="blog_userface">
+    <a href="http://my.csdn.net/szu030606" target="_blank">
+    <img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/1_szu030606.jpg" title="访问我的空间" style="max-width:90%">
+    </a>
+    <br>
+    <span><a href="http://my.csdn.net/szu030606" class="user_name" target="_blank">szu030606</a></span>
+</div>
+<div class="interact">
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]"></a>
+<a href="javascript:void(0);" class="letter" onclick="loginto(1)" title="[发私信]"></a>
+</div>
+<div id="blog_medal">
+<div id="bms_box"><a href="http://medal.blog.csdn.net/allmedal.aspx" target="_blank"><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/holdon_s.gif" onmouseover="m_over_m(this,0)" onmouseout="m_out_m()" alt=""></a></div></div>
+<ul id="blog_rank">
+    <li>访问：<span>950406次</span></li>
+    <li>积分：<span>13355分</span></li>
+    <li>排名：<span>第148名</span></li>
+</ul>
+<ul id="blog_statistics">
+    <li>原创：<span>249篇</span></li>
+    <li>转载：<span>967篇</span></li>
+    <li>译文：<span>15篇</span></li>
+    <li>评论：<span>260条</span></li>
+</ul>
+</ul>
+</div>
+
+
+
+<div class="panel" id="panel_Search">
+    <ul class="panel_head"><span>文章搜索</span></ul>
+    <ul class="panel_body">
+        <form id="frmSearch" action="http://so.csdn.net/search" class="form_search" target="_blank">
+        <span><input id="inputSearch" type="text" class="blogsearch" title="请输入关键字"></span>
+        <input id="btnSubmit" type="submit" value="搜索" title="search in blog">
+        <input type="hidden" name="q" id="inputQ">
+        <input type="hidden" name="t" value="blog">
+        <a id="btnSearchBlog" target="_blank"></a>
+        </form>
+    </ul>
+</div><div id="panel_Category" class="panel">
+<ul class="panel_head"><span>文章分类</span></ul>
+<ul class="panel_body">
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1358488">HEVC/H265</a><span>(10)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/741999">DirectShow</a><span>(7)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1238420">C语言进阶</a><span>(69)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/738366">h264</a><span>(201)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/742887">GSM</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/743431">symbian</a><span>(2)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/742009">多媒体算法优化</a><span>(10)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/751383">杂项</a><span>(147)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/742008">流媒体传输协议解析</a><span>(10)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/740318">算术编码</a><span>(9)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/743226">音频</a><span>(23)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066467">视频综合</a><span>(39)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066471">ffmpeg</a><span>(42)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066475">视频转换</a><span>(1)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066549">avs标准</a><span>(10)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066557">vlc代码分析</a><span>(5)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066585">linux</a><span>(62)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1066643">架构设计</a><span>(42)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1067063">面试</a><span>(89)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1067175">程序员成长</a><span>(652)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1071017">xvid</a><span>(4)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/category/1071079">多线程</a><span>(7)</span>
+</li>
+</ul>
+</div><div id="panel_Archive" class="panel">
+<ul class="panel_head"><span>文章存档</span></ul>
+<ul class="panel_body">
+<div id="archive_list"><li><a href="http://blog.csdn.net/szu030606/article/month/2013/03">2013年03月</a><span>(11)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2013/02">2013年02月</a><span>(17)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2013/01">2013年01月</a><span>(25)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/12">2012年12月</a><span>(45)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/11">2012年11月</a><span>(8)</span></li><span class="hidelist" style="display:none;"><li><a href="http://blog.csdn.net/szu030606/article/month/2012/10">2012年10月</a><span>(36)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/09">2012年09月</a><span>(122)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/08">2012年08月</a><span>(8)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/07">2012年07月</a><span>(9)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/06">2012年06月</a><span>(31)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/05">2012年05月</a><span>(160)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/04">2012年04月</a><span>(57)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/03">2012年03月</a><span>(63)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/02">2012年02月</a><span>(273)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2012/01">2012年01月</a><span>(159)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2010/11">2010年11月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2010/10">2010年10月</a><span>(202)</span></li><li><a href="http://blog.csdn.net/szu030606/article/month/2010/09">2010年09月</a><span>(4)</span></li></span><div id="archive_list_button" class="list_closed">展开</div></div>
+</ul>
+</div>
+<div id="hotarticls" class="panel">
+<ul class="panel_head"><span>阅读排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7553730" title="中国历代王朝大排名">中国历代王朝大排名</a><span>(27267)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7213319" title="程序人生 zz 文章老了点 以前一些程序人的经历">程序人生 zz 文章老了点 以前一些程序人的经历</a><span>(21433)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7212278" title="软件需求与问题解决">软件需求与问题解决</a><span>(19439)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7213306" title="来自IT公司速查手册的各大IT公司薪资和待遇内幕">来自IT公司速查手册的各大IT公司薪资和待遇内幕</a><span>(18127)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7213529" title="新东方老师谈如何学英语">新东方老师谈如何学英语</a><span>(16372)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7594049" title="互联网手机潮进入PK时代：周鸿祎激战小米雷军">互联网手机潮进入PK时代：周鸿祎激战小米雷军</a><span>(14499)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7252850" title="多读读书，对自己有好处">多读读书，对自己有好处</a><span>(13301)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7251850" title="彩票相关知识">彩票相关知识</a><span>(12314)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7568164" title="中国大城市政治地位综合实力排名">中国大城市政治地位综合实力排名</a><span>(10920)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7213527" title="挨踢人生路 记我的10年18家工作经历">挨踢人生路 记我的10年18家工作经历</a><span>(10632)</span>
+</li>
+</ul>
+</div>
+<div id="hotarticls2" class="panel">
+<ul class="panel_head"><span>评论排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7281955" title="人心散了、项目必然要败">人心散了、项目必然要败</a><span>(21)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/8564782" title="为什么我要转载文章？">为什么我要转载文章？</a><span>(16)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7297943" title="一次失败的项目经理招聘经验">一次失败的项目经理招聘经验</a><span>(14)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7534439" title="从另一个角度看大数据量处理利器：布隆过滤器">从另一个角度看大数据量处理利器：布隆过滤器</a><span>(14)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7537204" title="写博客的好处，专家告诉你">写博客的好处，专家告诉你</a><span>(11)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7257649" title="推辞掉得不是你的工作，而是你的未来">推辞掉得不是你的工作，而是你的未来</a><span>(9)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7251534" title="从程序员到技术总监，分享10年开发经验">从程序员到技术总监，分享10年开发经验</a><span>(7)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7266670" title="暗时间--平凡与优秀间的距离">暗时间--平凡与优秀间的距离</a><span>(7)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7497277" title="程序员编程需要多少个小时？">程序员编程需要多少个小时？</a><span>(7)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/szu030606/article/details/7497281" title="我身边的手机应用开发者">我身边的手机应用开发者</a><span>(6)</span>
+</li>
+</ul>
+</div>
+<div id="homepageArticles" class="panel">
+<ul class="panel_head"><span>推荐文章</span></ul>
+<ul class="panel_body" id="ad_commend"><iframe id="ad_frm_1" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 196px; height: 173px;" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ad.html"></iframe></ul>
+</div>
+<script type="text/javascript">
+ new Ad(12, 'ad_commend');
+</script><div id="newcomments" class="panel">
+<ul class="panel_head"><span>最新评论</span></ul>
+<ul class="panel_body itemlist">
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/7297943#comments">一次失败的项目经理招聘经验</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/mpg2012" class="user_name">mpg2012</a>:
+楼主的文章很有启发性，能让人成长，看到别人的问题并帮助别人成长，也认识到自己的问题，并正视自己的问题...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/7210550#comments">ffmpeg  mplayer  x264  代码重点详解 详细分析</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/u010049740" class="user_name">u010049740</a>:
+...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8664982#comments">HEVC/H265 HM10.0 分析（二）TComDataCU.cpp</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/p08170082" class="user_name">p08170082</a>:
+楼主，辛苦了，谢谢，坐等接下来的部分
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8565318#comments">C++ 标准库 vector list map使用方法</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/gdnh22a" class="user_name">gdnh22a</a>:
+STL很有用，楼主总结的很详细。
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8564782#comments">为什么我要转载文章？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/birdbeyondl" class="user_name">birdbeyondl</a>:
+是啊 时间越来越少  很少有时间去写东西啊
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8573346#comments">如何保证代码的高质量？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/haoyuhai" class="user_name">PerryHao</a>:
+不错，深有同感
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8573346#comments">如何保证代码的高质量？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/liutengteng130" class="user_name">liutengteng130</a>:
+学习了。
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8564782#comments">为什么我要转载文章？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/wlsgzl" class="user_name">wlsgzl</a>:
+@szu030606:网上看了个三十分钟学会STL的文章，发现写的挺好，不过是是针对GCC的，还好除...
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8564782#comments">为什么我要转载文章？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/szu030606" class="user_name">szu030606</a>:
+对呀，但时间忙，有人发私信给我，想我推荐一些文章，尽量原创！！！
+    </p>
+    </li>
+    <li>
+    <a href="http://blog.csdn.net/szu030606/article/details/8564782#comments">为什么我要转载文章？</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/FansUnion" class="user_name">FansUnion</a>:
+转载 远大于 原创，给人的印象不好的！！！
+    </p>
+    </li>
+</ul>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+</div>
+
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/newblog.min.js"></script>
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+
+<script type="text/javascript">
+document.write('<script type="text/javascript" src="http://csdnimg.cn/pubfooter/js/publib_footer.js?' + Math.floor(new Date()/120000).toString(36) + '="></'+'script>');
+</script><script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/publib_footer.js"></script><link rel="stylesheet" type="text/css" href="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/pub_footer_2012.css"><div id="pub_footerall" class="pub_footerall"><dl><dt></dt> <dd><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a>|<a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a>|<a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a>|<a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a>|<a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a>|<a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a>|<a href="mailto:webmaster@csdn.net">问题报告</a></dd><dd><a href="http://wpa.qq.com/msgrd?v=3&uin=2355263776&site=qq&menu=yes" target="_blank" class="qq">QQ客服</a> <a href="http://e.weibo.com/csdnsupport/profile" target="_blank" class="weibo">微博客服</a> <a href="http://bbs.csdn.net/forums/Service" target="_blank" class="online">论坛反馈</a> <a href="mailto:webmaster@csdn.net" class="email">联系邮箱：webmaster@csdn.net</a> <span class="phone">服务热线：400-600-2320</span></dd><dd>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd><dd>北京创新乐知信息技术有限公司 版权所有</dd><dd>世纪乐知(北京)网络技术有限公司 提供技术支持</dd><dd>江苏乐知网络技术有限公司 提供商务支持</dd><dd>Copyright © 1999-2012, CSDN.NET, All Rights Reserved&nbsp;<a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div><script id="noticeScript" type="text/javascript" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/note.js"></script><script type="text/javascript" charset="utf-8" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/tracking.js"></script>
+
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/login.js"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/pv.aspx" border="0" width="0" height="0">
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+
+
+<script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ad-blog.js"></script><script type="text/javascript" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ad-ms502.js"></script>
+
+
+</div>
+
+<iframe style="width: 1px; height: 1px; position: absolute; visibility: hidden;" src="./264编码基本概念 FFMpeg的解码流程 - szu030606的专栏 - 博客频道 - CSDN.NET_files/ibm-mianfei-eis-downloadhomepage-728-90-0403.html"></iframe></body></html>
